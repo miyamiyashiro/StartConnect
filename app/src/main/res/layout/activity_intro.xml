@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4B2C7F">
+
+    <ImageView
+        android:id="@+id/logoGrande"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/logo_sc_branco" />
+
+    <TextView
+        android:id="@+id/txtFrase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logoGrande"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="TUDO COMEÇA COM UMA CONEXÃO"
+        android:fontFamily="sans-serif-black"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnIrLogin"
+            android:layout_width="150dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="#1A1F2B"
+            android:text="ENTRAR"
+            android:textColor="#FFFFFF"
+            android:elevation="8dp"
+            app:cornerRadius="12dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnIrCadastro"
+            android:layout_width="150dp"
+            android:layout_height="64dp"
+            android:backgroundTint="#45A09E"
+            android:text="CADASTRAR"
+            android:textColor="#FFFFFF"
+            android:elevation="8dp"
+            app:cornerRadius="12dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

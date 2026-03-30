@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="40dp"
+    android:background="@drawable/background_login"> <com.google.android.material.imageview.ShapeableImageView
+    android:id="@+id/imgGrupo"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="40dp"
+    android:padding="4dp"
+    android:src="@drawable/foto_grupo"
+    app:shapeAppearanceOverlay="@style/CircleImage"
+    app:strokeColor="#2E4B43"
+    app:strokeWidth="4dp" />
+
+    <TextView
+        android:id="@+id/txtBemVindo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgGrupo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Bem-vindo(a)"
+        android:textColor="#4B2C7F"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/txtBemVindo"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/card_roxo_shape"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:src="@drawable/logo_sc_branco" />
+
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edittext_border"
+            android:drawableStart="@android:drawable/ic_dialog_email"
+            android:drawablePadding="10dp"
+            android:hint="email"
+            android:paddingStart="15dp"
+            android:textColorHint="#99FFFFFF"
+            android:textColor="#FFFFFF"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/edittext_border"
+            android:drawableStart="@android:drawable/ic_lock_idle_lock"
+            android:drawablePadding="10dp"
+            android:hint="senha"
+            android:paddingStart="15dp"
+            android:textColorHint="#99FFFFFF"
+            android:textColor="#FFFFFF"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            android:text="esqueci minha senha"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#2E4B43"
+            android:text="ENTRAR"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="Não tem uma conta? Crie aqui!"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</RelativeLayout>
