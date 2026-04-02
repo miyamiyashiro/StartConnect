@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString().trim()
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.1.101/")
+                .baseUrl("http://192.168.56.96/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -66,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
     }
 }
 
-// Interface de serviço para o Retrofit (Passo 7)
+
 interface ApiService {
     @GET("/meu_projeto_pi/login.php")
     fun login(

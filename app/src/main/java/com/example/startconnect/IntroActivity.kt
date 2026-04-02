@@ -14,7 +14,6 @@ class IntroActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_intro)
 
-        // ajuste de tela
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -22,10 +21,9 @@ class IntroActivity : AppCompatActivity() {
         }
 
 
-        // 1. Encontra o botão de Entrar (verifique se o ID no XML é btnIrLogin)
+
         val btnIrLogin: Button = findViewById(R.id.btnIrLogin)
 
-        // 2. Configura o clique para mudar de tela
         btnIrLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
