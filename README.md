@@ -43,8 +43,10 @@ Sempre que mudamos de rede ou de computador, o endereço do servidor muda. Para 
 ---
 
 ## 👩‍💻 Integrantes do Grupo
-* Luana Miyashiro Salles de Oliveira
-* (Adicionem os outros nomes aqui!)
+* Isabelle Vitoria Matos
+* Laís Lívia
+* Luana Miyashiro
+* Yasmin Carolina
 
 ---
 *Dica: Sempre que terminarem uma alteração, façam o **Commit** e o **Push** pelo GitHub Desktop para manter o projeto atualizado para todas!*
