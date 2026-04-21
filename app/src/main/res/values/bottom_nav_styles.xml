@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BottomNavActiveIndicator" >
+        <item name="android:width">44dp</item>
+        <item name="android:height">10dp</item>
+        <item name="marginHorizontal">0dp</item>
+        <item name="color">#E9D8F2</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.StartConnect.BottomNavIndicator</item>
+    </style>
+
+    <style name="ShapeAppearance.StartConnect.BottomNavIndicator" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+</resources>

@@ -5,15 +5,23 @@
         android:icon="@drawable/home_simbolo"
         android:title="Home" />
     <item
-        android:id="@+id/nav_favoritos"
-        android:icon="@drawable/favoritos_menu"
-        android:title="Favoritos" />
+        android:id="@+id/nav_conta"
+        android:icon="@drawable/minhaconta_menu"
+        android:title="Conta" />
     <item
         android:id="@+id/nav_chat"
         android:icon="@drawable/chat_menu"
         android:title="Chat" />
     <item
-        android:id="@+id/nav_perfil"
-        android:icon="@drawable/minhaconta_menu"
-        android:title="Perfil" />
+        android:id="@+id/nav_favoritos"
+        android:icon="@drawable/favoritos_menu"
+        android:title="Curtir" />
+    <item
+        android:id="@+id/nav_notificacoes"
+        android:icon="@drawable/notificacao_menu"
+        android:title="Notificacoes" />
+    <item
+        android:id="@+id/nav_sair"
+        android:icon="@drawable/logoout_menu"
+        android:title="Sair" />
 </menu>

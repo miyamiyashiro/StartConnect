@@ -30,9 +30,10 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_gravity="bottom|end"
-                android:src="@drawable/editar_simbolo"
+                android:padding="5dp"
                 android:background="@drawable/bg_circular_editar"
-                android:padding="5dp" />
+                android:src="@drawable/editar_simbolo" />
+
         </FrameLayout>
 
         <LinearLayout
@@ -72,9 +73,9 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="140dp"
             android:gravity="center"
+            android:text="Você ainda não tem nenhuma startup cadastrada."
             android:textColor="#FFFFFF"
             android:textSize="16sp" />
-
 
         <Space
             android:layout_width="match_parent"
@@ -92,16 +93,76 @@
             android:textColor="#000000"
             app:backgroundTint="#FFFFFF"
             app:cornerRadius="18dp" />
-
     </LinearLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <LinearLayout
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@drawable/card_branco_arredondado"
-        app:menu="@menu/bottom_menu"  app:itemIconTint="#2F4F4F"
-        app:itemTextColor="#2F4F4F"
-        app:labelVisibilityMode="unlabeled" />
+        android:layout_height="54dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bottom_nav_background"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:weightSum="6">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <View
+                android:layout_width="36dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bottom_nav_selected_bg" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/home_simbolo" />
+        </FrameLayout>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:src="@drawable/minhaconta_menu" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:src="@drawable/chat_menu" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:src="@drawable/favoritos_menu" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:src="@drawable/notificacao_menu" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:src="@drawable/logoout_menu" />
+    </LinearLayout>
 
 </LinearLayout>
+
+
