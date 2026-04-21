@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.0.166/") // Lembre-se de sempre atualizar o IP se mudar de rede!
+                .baseUrl("http://192.168.1.100/") // Lembre-se de sempre atualizar o IP se mudar de rede!
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 

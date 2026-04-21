@@ -1,31 +1,31 @@
 package com.example.startconnect
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import com.google.android.material.button.MaterialButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class AddStartupActivity : AppCompatActivity() {
+class CreateStartupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        setContentView(R.layout.activity_add_startup)
+        setContentView(R.layout.activity_create_startup)
 
-        val mainView = findViewById<android.view.View>(android.R.id.content)
-        ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
+        val mainView = findViewById<View>(android.R.id.content)
+        ViewCompat.setOnApplyWindowInsetsListener(mainView) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        findViewById<MaterialButton>(R.id.btnAbrirAddStartup).setOnClickListener {
-            startActivity(Intent(this, CreateStartupActivity::class.java))
+        findViewById<MaterialButton>(R.id.btnSalvarStartup).setOnClickListener {
+            Toast.makeText(this, "Startup salva com sucesso!", Toast.LENGTH_SHORT).show()
         }
 
         setupBottomNavigation()
@@ -58,12 +58,6 @@ class AddStartupActivity : AppCompatActivity() {
                     .setDuration(180)
                     .start()
             }
-
-            selectedContainer.animate()
-                .scaleX(1f)
-                .scaleY(1f)
-                .setDuration(120)
-                .start()
         }
 
         menuItems.forEach { (container, icon) ->
@@ -73,5 +67,6 @@ class AddStartupActivity : AppCompatActivity() {
         }
 
         selectItem(findViewById(R.id.navHomeContainer), findViewById(R.id.navHomeIcon))
+
     }
 }
