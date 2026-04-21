@@ -22,6 +22,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        // Verifique se esses IDs batem com o seu activity_login.xml
         emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         val loginButton: Button = findViewById(R.id.loginButton)
@@ -30,8 +31,13 @@ class LoginActivity : AppCompatActivity() {
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.56.96/")
+                .baseUrl("http://192.168.1.102/") // Lembre-se de sempre atualizar o IP se mudar de rede!
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -46,27 +52,27 @@ class LoginActivity : AppCompatActivity() {
                     if (response.isSuccessful && response.body() != null) {
                         val loginResponses = response.body()!!
                         if (loginResponses.isNotEmpty()) {
-                            // Login sucesso: vai para a MainActivity (Passo 7)
-                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            // Login Sucesso -> Vai para AddStartup
+                            val intent = Intent(this@LoginActivity, AddStartupActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
                             Toast.makeText(this@LoginActivity, "Usuário ou senha inválidos", Toast.LENGTH_LONG).show()
                         }
                     } else {
-                        Toast.makeText(this@LoginActivity, "Erro no login", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@LoginActivity, "Erro no servidor", Toast.LENGTH_LONG).show()
                     }
                 }
 
                 override fun onFailure(call: Call<List<LoginResponse>>, t: Throwable) {
-                    Toast.makeText(this@LoginActivity, "Erro: ${t.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@LoginActivity, "Falha na conexão: ${t.message}", Toast.LENGTH_LONG).show()
                 }
             })
         }
     }
 }
 
-
+// Interface para o Retrofit
 interface ApiService {
     @GET("/meu_projeto_pi/login.php")
     fun login(
