@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">StartConnect</string>
+
+    <string-array name="account_type_options">
+        <item>Empreendedor</item>
+        <item>Investidor</item>
+    </string-array>
 </resources>

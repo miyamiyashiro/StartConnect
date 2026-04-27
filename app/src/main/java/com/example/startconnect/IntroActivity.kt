@@ -1,8 +1,8 @@
 package com.example.startconnect
 
-import android.content.Intent // Importante para mudar de tela
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button // Importante para o botão
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -14,21 +14,21 @@ class IntroActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_intro)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-
-
         val btnIrLogin: Button = findViewById(R.id.btnIrLogin)
+        val btnIrCadastro: Button = findViewById(R.id.btnIrCadastro)
 
         btnIrLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, LoginActivity::class.java))
         }
 
-
+        btnIrCadastro.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
+}

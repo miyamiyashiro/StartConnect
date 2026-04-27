@@ -13,6 +13,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.POST
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var emailEditText: EditText
@@ -37,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.1.100/") // Lembre-se de sempre atualizar o IP se mudar de rede!
+                .baseUrl("http://192.168.1.102/") // Lembre-se de sempre atualizar o IP se mudar de rede!
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -79,4 +82,14 @@ interface ApiService {
         @Query("usuario") usuario: String,
         @Query("senha") senha: String
     ): Call<List<LoginResponse>>
+
+    @FormUrlEncoded
+    @POST("/meu_projeto_pi/cadastro.php")
+    fun register(
+        @Field("nome") nome: String,
+        @Field("email") email: String,
+        @Field("senha") senha: String,
+        @Field("tipo") tipo: String
+    ): Call<RegisterResponse>
 }
+

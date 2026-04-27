@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/registerRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4B2C7F">
+
+    <ImageView
+        android:id="@+id/registerLogo"
+        android:layout_width="210dp"
+        android:layout_height="210dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no"
+        android:src="@drawable/logo_sc_branco" />
+
+    <TextView
+        android:id="@+id/registerSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/registerLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-24dp"
+        android:gravity="center"
+        android:text="TUDO COMEÇA COM&#10;UMA CONEXÃO"
+        android:textColor="#F1EAF4"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/register_panel_background"
+        android:elevation="12dp"
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingTop="28dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="28dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/register_input_background"
+            android:elevation="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@null"
+                android:importantForAccessibility="no"
+                android:src="@drawable/nome_conta" />
+
+            <EditText
+                android:id="@+id/registerNameEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="nome"
+                android:inputType="textPersonName"
+                android:paddingStart="12dp"
+                android:textColor="#5A7073"
+                android:textColorHint="#7A8E92" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/register_input_background"
+            android:elevation="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@null"
+                android:importantForAccessibility="no"
+                android:src="@android:drawable/ic_dialog_email" />
+
+            <EditText
+                android:id="@+id/registerEmailEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="email"
+                android:inputType="textEmailAddress"
+                android:paddingStart="12dp"
+                android:textColor="#5A7073"
+                android:textColorHint="#7A8E92" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/register_input_background"
+            android:elevation="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@null"
+                android:importantForAccessibility="no"
+                android:src="@android:drawable/ic_lock_lock" />
+
+            <EditText
+                android:id="@+id/registerPasswordEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="senha"
+                android:inputType="textPassword"
+                android:paddingStart="12dp"
+                android:textColor="#5A7073"
+                android:textColorHint="#7A8E92" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/register_input_background"
+            android:elevation="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@null"
+                android:importantForAccessibility="no"
+                android:src="@android:drawable/ic_lock_lock" />
+
+            <EditText
+                android:id="@+id/registerConfirmPasswordEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="confirme sua senha"
+                android:inputType="textPassword"
+                android:paddingStart="12dp"
+                android:textColor="#5A7073"
+                android:textColorHint="#7A8E92" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/register_input_background"
+            android:elevation="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@null"
+                android:importantForAccessibility="no"
+                android:rotation="180"
+                android:src="@android:drawable/ic_media_next" />
+
+            <AutoCompleteTextView
+                android:id="@+id/registerAccountTypeDropdown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:hint="selecione o tipo de conta"
+                android:inputType="none"
+                android:paddingStart="12dp"
+                android:textColor="#5A7073"
+                android:textColorHint="#7A8E92" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/registerButton"
+            android:layout_width="160dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/register_button_background"
+            android:backgroundTint="@null"
+            android:text="CADASTRAR"
+            android:textAllCaps="false"
+            android:textColor="#5A7073"
+            android:textSize="17sp" />
+
+
+        <TextView
+            android:id="@+id/goToLoginText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="18dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="← Já tenho uma conta"
+            android:textColor="#5A7073"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</RelativeLayout>
+
+
+

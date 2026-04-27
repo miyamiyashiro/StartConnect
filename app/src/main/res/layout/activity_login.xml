@@ -4,17 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="40dp"
-    android:background="@drawable/bg_home_gradient"> <com.google.android.material.imageview.ShapeableImageView
-    android:id="@+id/imgGrupo"
-    android:layout_width="150dp"
-    android:layout_height="150dp"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="40dp"
-    android:padding="4dp"
-    android:src="@drawable/foto_grupo"
-    app:shapeAppearanceOverlay="@style/CircleImage"
-    app:strokeColor="#2E4B43"
-    app:strokeWidth="4dp" />
+    android:background="@drawable/background_login">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgGrupo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:padding="4dp"
+        android:src="@drawable/foto_grupo"
+        app:shapeAppearanceOverlay="@style/CircleImage"
+        app:strokeColor="#2E4B43"
+        app:strokeWidth="4dp" />
 
     <TextView
         android:id="@+id/txtBemVindo"
@@ -51,10 +53,10 @@
             android:drawableStart="@android:drawable/ic_dialog_email"
             android:drawablePadding="10dp"
             android:hint="email"
+            android:inputType="textEmailAddress"
             android:paddingStart="15dp"
-            android:textColorHint="#99FFFFFF"
             android:textColor="#FFFFFF"
-            android:inputType="textEmailAddress" />
+            android:textColorHint="#99FFFFFF" />
 
         <EditText
             android:id="@+id/passwordEditText"
@@ -65,10 +67,10 @@
             android:drawableStart="@android:drawable/ic_lock_idle_lock"
             android:drawablePadding="10dp"
             android:hint="senha"
+            android:inputType="textPassword"
             android:paddingStart="15dp"
-            android:textColorHint="#99FFFFFF"
             android:textColor="#FFFFFF"
-            android:inputType="textPassword" />
+            android:textColorHint="#99FFFFFF" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -90,11 +92,14 @@
             android:textColor="#FFFFFF" />
 
         <TextView
+            android:id="@+id/goToRegisterText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="Não tem uma conta? Crie aqui!"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Não tem uma conta? Clique aqui!"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>
