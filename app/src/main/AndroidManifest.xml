@@ -15,7 +15,10 @@
         android:theme="@style/Theme.StartConnect"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".RegisterResponse"
+            android:name=".StartupRegisterResponse"
+            android:exported="false" />
+        <activity
+            android:name=".StartupResponse"
             android:exported="false" />
         <activity
             android:name=".IntroActivity"
@@ -37,6 +40,9 @@
             android:exported="false" />
         <activity
             android:name=".CreateStartupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeInvestidorActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

@@ -1,11 +1,8 @@
 package com.example.startconnect
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,70 +10,46 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class AddStartupActivity : AppCompatActivity() {
+class HomeInvestidorActivity : AppCompatActivity() {
+
     private lateinit var recyclerView: RecyclerView
-    private lateinit var emptyStateLayout: LinearLayout
-    private lateinit var btnAbrirAddStartup: MaterialButton
-    private lateinit var btnAbrirAddStartupFooter: MaterialButton
-    private var usuarioId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_add_startup)
+        setContentView(R.layout.activity_home_investidor)
 
-        val mainView = findViewById<View>(android.R.id.content)
-        ViewCompat.setOnApplyWindowInsetsListener(mainView) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.investorHomeRoot)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        usuarioId = intent.getIntExtra("usuarioId", -1)
-        recyclerView = findViewById(R.id.entrepreneurStartupsRecyclerView)
-        emptyStateLayout = findViewById(R.id.emptyStateLayout)
-        btnAbrirAddStartup = findViewById(R.id.btnAbrirAddStartup)
-        btnAbrirAddStartupFooter = findViewById(R.id.btnAbrirAddStartupFooter)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val openCreateStartup = {
-            val intent = Intent(this, CreateStartupActivity::class.java)
-            intent.putExtra("usuarioId", usuarioId)
-            startActivity(intent)
-        }
-
-        btnAbrirAddStartup.setOnClickListener { openCreateStartup() }
-        btnAbrirAddStartupFooter.setOnClickListener { openCreateStartup() }
-
+        setupRecyclerView()
+        fetchStartups()
         setupBottomNavigation()
     }
 
-    override fun onResume() {
-        super.onResume()
-        fetchUserStartups()
+    private fun setupRecyclerView() {
+        recyclerView = findViewById(R.id.startupsRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun fetchUserStartups() {
-        if (usuarioId == -1) {
-            Toast.makeText(this, "Usuário inválido", Toast.LENGTH_LONG).show()
-            return
-        }
-
+    private fun fetchStartups() {
         val retrofit = Retrofit.Builder()
             .baseUrl("http://192.168.1.102/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val apiService = retrofit.create(ApiService::class.java)
-        apiService.getStartupsByUser(usuarioId).enqueue(object : Callback<List<StartupResponse>> {
+
+        apiService.getStartups().enqueue(object : Callback<List<StartupResponse>> {
             override fun onResponse(
                 call: Call<List<StartupResponse>>,
                 response: Response<List<StartupResponse>>
@@ -96,26 +69,18 @@ class AddStartupActivity : AppCompatActivity() {
                         )
                     }
 
-                    if (startups.isEmpty()) {
-                        emptyStateLayout.visibility = View.VISIBLE
-                        recyclerView.visibility = View.GONE
-                        btnAbrirAddStartupFooter.visibility = View.GONE
-                    } else {
-                        emptyStateLayout.visibility = View.GONE
-                        recyclerView.visibility = View.VISIBLE
-                        btnAbrirAddStartupFooter.visibility = View.VISIBLE
-                        recyclerView.adapter = StartupAdapter(startups)
-                    }
+                    recyclerView.adapter = StartupAdapter(startups)
                 } else {
-                    Toast.makeText(this@AddStartupActivity, "Erro ao carregar startups", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@HomeInvestidorActivity, "Erro ao carregar startups", Toast.LENGTH_LONG).show()
                 }
             }
 
             override fun onFailure(call: Call<List<StartupResponse>>, t: Throwable) {
-                Toast.makeText(this@AddStartupActivity, "Falha na conexao: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@HomeInvestidorActivity, "Falha na conexão: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
     }
+
     private fun setupBottomNavigation() {
         val menuItems = listOf(
             findViewById<View>(R.id.navHomeContainer) to findViewById<ImageView>(R.id.navHomeIcon),
@@ -143,12 +108,6 @@ class AddStartupActivity : AppCompatActivity() {
                     .setDuration(180)
                     .start()
             }
-
-            selectedContainer.animate()
-                .scaleX(1f)
-                .scaleY(1f)
-                .setDuration(120)
-                .start()
         }
 
         menuItems.forEach { (container, icon) ->

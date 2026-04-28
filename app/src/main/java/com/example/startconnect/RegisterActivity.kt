@@ -19,7 +19,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RegisterActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -58,15 +57,12 @@ class RegisterActivity : AppCompatActivity() {
                 name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || accountType.isEmpty() -> {
                     Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
                 }
-
                 password != confirmPassword -> {
                     Toast.makeText(this, "As senhas precisam ser iguais", Toast.LENGTH_SHORT).show()
                 }
-
                 accountType != "Empreendedor" && accountType != "Investidor" -> {
-                    Toast.makeText(this, "Selecione um tipo de conta válido", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Selecione um tipo de conta valido", Toast.LENGTH_SHORT).show()
                 }
-
                 else -> {
                     val retrofit = Retrofit.Builder()
                         .baseUrl("http://192.168.1.102/")
@@ -95,20 +91,12 @@ class RegisterActivity : AppCompatActivity() {
                                     finish()
                                 }
                             } else {
-                                Toast.makeText(
-                                    this@RegisterActivity,
-                                    "Erro no servidor",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                Toast.makeText(this@RegisterActivity, "Erro no servidor", Toast.LENGTH_LONG).show()
                             }
                         }
 
                         override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "Falha na conexão: ${t.message}",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            Toast.makeText(this@RegisterActivity, "Falha na conexao: ${t.message}", Toast.LENGTH_LONG).show()
                         }
                     })
                 }

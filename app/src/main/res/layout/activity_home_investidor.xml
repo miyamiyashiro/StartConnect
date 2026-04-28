@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/investorHomeRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,36 +10,41 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="94dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/card_verde"
+        android:background="@drawable/investor_header_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp">
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:src="@drawable/foto_vazia" />
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:contentDescription="@null"
+                android:importantForAccessibility="no"
+                android:src="@drawable/foto_grupo" />
 
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
                 android:layout_gravity="bottom|end"
                 android:background="@drawable/bg_circular_editar"
-                android:padding="5dp"
+                android:contentDescription="@null"
+                android:importantForAccessibility="no"
+                android:padding="3dp"
                 android:src="@drawable/editar_simbolo" />
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="16dp"
             android:orientation="vertical">
 
             <TextView
@@ -46,14 +52,14 @@
                 android:layout_height="wrap_content"
                 android:text="Home"
                 android:textColor="#FFFFFF"
-                android:textSize="28sp" />
+                android:textSize="26sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="\@Empreendedor"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:text="\@Investidor"
+                android:textColor="#E7FFFF"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -67,55 +73,47 @@
         android:padding="20dp">
 
         <LinearLayout
-            android:id="@+id/emptyStateLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="48dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/investor_search_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@null"
+                android:importantForAccessibility="no"
+                android:src="@android:drawable/ic_menu_search" />
+
+            <EditText
+                android:id="@+id/searchEditText"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:gravity="center"
-                android:text="Você ainda não tem nenhuma startup cadastrada."
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="use palavras-chave"
+                android:inputType="text"
+                android:paddingStart="10dp"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAbrirAddStartup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Adicionar Startup"
-                android:textAllCaps="false"
-                android:textColor="#000000"
-                app:backgroundTint="#FFFFFF"
-                app:cornerRadius="18dp" />
+                android:textColorHint="#D8F8F7" />
         </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/entrepreneurStartupsRecyclerView"
+            android:id="@+id/startupsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:clipToPadding="false"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
             android:paddingBottom="8dp"
-            android:scrollbars="none"
-            android:visibility="gone" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAbrirAddStartupFooter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:text="Adicionar Startup"
-            android:textAllCaps="false"
-            android:textColor="#000000"
-            app:backgroundTint="#FFFFFF"
-            app:cornerRadius="18dp" />
+            android:scrollbars="none" />
 
     </LinearLayout>
 
@@ -129,29 +127,10 @@
         android:background="@drawable/bottom_nav_background"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:weightSum="6">
 
-        <FrameLayout
-            android:id="@+id/navHomeContainer"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:contentDescription="Home"
-            android:focusable="true">
-
-            <ImageView
-                android:id="@+id/navHomeIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:contentDescription="@null"
-                android:importantForAccessibility="no"
-                android:src="@drawable/home_simbolo"
-                app:tint="@color/bottom_nav_icon_tint" />
-        </FrameLayout>
         <FrameLayout
             android:id="@+id/navHomeContainer"
             android:layout_width="0dp"
@@ -211,6 +190,7 @@
                 android:src="@drawable/chat_menu"
                 app:tint="@color/bottom_nav_icon_tint" />
         </FrameLayout>
+
         <FrameLayout
             android:id="@+id/navFavoritosContainer"
             android:layout_width="0dp"
@@ -274,8 +254,3 @@
     </LinearLayout>
 
 </LinearLayout>
-
-
-
-
-
