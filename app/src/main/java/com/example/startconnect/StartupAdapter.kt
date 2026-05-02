@@ -7,7 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class StartupAdapter(
-    private val startups: List<Startup>
+    private val startups: List<Startup>,
+    private val onItemClick: ((Startup) -> Unit)? = null
 ) : RecyclerView.Adapter<StartupAdapter.StartupViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StartupViewHolder {
@@ -17,7 +18,11 @@ class StartupAdapter(
     }
 
     override fun onBindViewHolder(holder: StartupViewHolder, position: Int) {
-        holder.bind(startups[position])
+        val startup = startups[position]
+        holder.bind(startup)
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(startup)
+        }
     }
 
     override fun getItemCount(): Int = startups.size

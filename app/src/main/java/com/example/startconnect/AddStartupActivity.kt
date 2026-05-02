@@ -1,8 +1,12 @@
 package com.example.startconnect
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -26,6 +30,7 @@ class AddStartupActivity : AppCompatActivity() {
     private lateinit var btnAbrirAddStartup: MaterialButton
     private lateinit var btnAbrirAddStartupFooter: MaterialButton
     private var usuarioId: Int = -1
+    private var usuarioTipo: String = "Empreendedor"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +45,7 @@ class AddStartupActivity : AppCompatActivity() {
         }
 
         usuarioId = intent.getIntExtra("usuarioId", -1)
+        usuarioTipo = intent.getStringExtra("usuarioTipo") ?: "Empreendedor"
         recyclerView = findViewById(R.id.entrepreneurStartupsRecyclerView)
         emptyStateLayout = findViewById(R.id.emptyStateLayout)
         btnAbrirAddStartup = findViewById(R.id.btnAbrirAddStartup)
@@ -56,7 +62,15 @@ class AddStartupActivity : AppCompatActivity() {
         btnAbrirAddStartup.setOnClickListener { openCreateStartup() }
         btnAbrirAddStartupFooter.setOnClickListener { openCreateStartup() }
 
+        loadProfilePhoto()
         setupBottomNavigation()
+    }
+
+    private fun loadProfilePhoto() {
+        val bitmap = ProfilePhotoHelper.getPhotoBitmap(this, usuarioId)
+        if (bitmap != null) {
+            findViewById<android.widget.ImageView>(R.id.imgHeaderProfile).setImageBitmap(bitmap)
+        }
     }
 
     override fun onResume() {
@@ -71,7 +85,7 @@ class AddStartupActivity : AppCompatActivity() {
         }
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.102/")
+            .baseUrl("http://10.0.2.2:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -84,6 +98,7 @@ class AddStartupActivity : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     val startups = response.body()!!.map { startup ->
                         Startup(
+                            startupId = startup.startupId,
                             nome = startup.nome,
                             segmento = startup.segmento,
                             subtitulo = startup.subtitulo,
@@ -143,20 +158,75 @@ class AddStartupActivity : AppCompatActivity() {
                     .setDuration(180)
                     .start()
             }
-
-            selectedContainer.animate()
-                .scaleX(1f)
-                .scaleY(1f)
-                .setDuration(120)
-                .start()
         }
 
-        menuItems.forEach { (container, icon) ->
-            container.setOnClickListener {
-                selectItem(container, icon)
-            }
+        // Home -> ja esta aqui
+        findViewById<View>(R.id.navHomeContainer).setOnClickListener {
+            selectItem(it, findViewById(R.id.navHomeIcon))
+        }
+
+        // Conta -> vai pra PerfilActivity
+        findViewById<View>(R.id.navContaContainer).setOnClickListener {
+            val intent = Intent(this, PerfilActivity::class.java)
+            intent.putExtra("usuarioId", usuarioId)
+            intent.putExtra("usuarioTipo", usuarioTipo)
+            startActivity(intent)
+        }
+
+        // Chat -> vai pra ChatListActivity
+        findViewById<View>(R.id.navChatContainer).setOnClickListener {
+            val intent = Intent(this, ChatListActivity::class.java)
+            intent.putExtra("usuarioId", usuarioId)
+            intent.putExtra("usuarioTipo", usuarioTipo)
+            startActivity(intent)
+        }
+
+        // Favoritos -> vai pra FavoritosActivity
+        findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
+            val intent = Intent(this, FavoritosActivity::class.java)
+            intent.putExtra("usuarioId", usuarioId)
+            intent.putExtra("usuarioTipo", usuarioTipo)
+            startActivity(intent)
+        }
+
+        // Notificacoes -> vai pra NotificacoesActivity
+        findViewById<View>(R.id.navNotificacoesContainer).setOnClickListener {
+            val intent = Intent(this, NotificacoesActivity::class.java)
+            intent.putExtra("usuarioId", usuarioId)
+            intent.putExtra("usuarioTipo", usuarioTipo)
+            startActivity(intent)
+        }
+
+        // Sair -> dialog de logout
+        findViewById<View>(R.id.navSairContainer).setOnClickListener {
+            showLogoutDialog()
         }
 
         selectItem(findViewById(R.id.navHomeContainer), findViewById(R.id.navHomeIcon))
+    }
+
+    private fun showLogoutDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_logout)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.findViewById<MaterialButton>(R.id.btnConfirmarLogout).setOnClickListener {
+            dialog.dismiss()
+            val intent = Intent(this, IntroActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+
+        dialog.findViewById<MaterialButton>(R.id.btnCancelarLogout).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

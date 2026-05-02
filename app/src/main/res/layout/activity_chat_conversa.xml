@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/conversaRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_home_gradient"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Header teal com seta e nome -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="94dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/investor_header_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp">
+
+        <ImageView
+            android:id="@+id/btnVoltarChat"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="Voltar"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="#FFFFFF" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/foto_vazia"
+            app:shapeAppearanceOverlay="@style/CircleImage" />
+
+        <TextView
+            android:id="@+id/txtConversaNome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Startup"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Mensagens -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mensagensRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="12dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
+        android:scrollbars="none" />
+
+    <!-- Input de mensagem -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/edittext_border_branco"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:paddingStart="14dp"
+        android:paddingEnd="8dp">
+
+        <EditText
+            android:id="@+id/etMensagemChat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="Escreva uma mensagem..."
+            android:inputType="textMultiLine"
+            android:textColor="#335055"
+            android:textColorHint="#7A8D92" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEnviar"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Enviar"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            app:backgroundTint="#45A09E"
+            app:cornerRadius="12dp" />
+    </LinearLayout>
+
+</LinearLayout>

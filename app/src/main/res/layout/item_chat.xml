@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/edittext_border_branco"
+    android:elevation="2dp"
+    android:gravity="center_vertical"
+    android:minHeight="64dp"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:src="@drawable/foto_vazia"
+        app:shapeAppearanceOverlay="@style/CircleImage" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtChatNome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Startup"
+            android:textColor="#335055"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtChatUltimaMensagem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Mensagem"
+            android:textColor="#7A8D92"
+            android:textSize="13sp" />
+    </LinearLayout>
+</LinearLayout>

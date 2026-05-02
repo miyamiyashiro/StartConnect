@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/detalhesRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_home_gradient"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Header teal com seta voltar e nome da startup -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="94dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/investor_header_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp">
+
+        <ImageView
+            android:id="@+id/btnVoltar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="Voltar"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="#FFFFFF" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp">
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/foto_vazia" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtStartupNome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Startup"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtStartupSegmento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Segmento"
+                android:textColor="#E7FFFF"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Card roxo com conteudo -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_roxo_shape"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Descricao -->
+            <TextView
+                android:id="@+id/txtStartupDescricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/edittext_border_branco"
+                android:minHeight="100dp"
+                android:padding="16dp"
+                android:text="Descrição da startup"
+                android:textColor="#335055"
+                android:textSize="15sp" />
+
+            <!-- Tags -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tagOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/tag_pill_background"
+                    android:paddingStart="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="4dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tagTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/tag_pill_background"
+                    android:paddingStart="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="4dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tagThree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/tag_pill_background"
+                    android:paddingStart="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="4dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tagFour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tag_pill_background"
+                    android:paddingStart="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="4dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Mensagem de favorito -->
+            <LinearLayout
+                android:id="@+id/favoritoMessageLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/card_verde"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtFavoritoMsg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Você favoritou\n${Startup}!\nMande uma\nmensagem para\nfazer negócio!"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Campo mensagem -->
+            <LinearLayout
+                android:id="@+id/mensagemLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/edittext_border_branco"
+                android:gravity="center_vertical"
+                android:minHeight="50dp"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/etMensagem"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="escreva mensagem"
+                    android:inputType="textMultiLine"
+                    android:textColor="#335055"
+                    android:textColorHint="#7A8D92" />
+            </LinearLayout>
+
+            <!-- Botoes -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFavoritar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Favoritar"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    app:backgroundTint="#45A09E"
+                    app:cornerRadius="16dp"
+                    app:icon="@drawable/favoritos_menu"
+                    app:iconTint="#FFFFFF" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEnviarMsg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enviar mensagem"
+                    android:textAllCaps="false"
+                    android:textColor="#294B50"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:backgroundTint="#FFFFFF"
+                    app:cornerRadius="16dp"
+                    app:strokeColor="#6BC2C8"
+                    app:strokeWidth="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnVoltar2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Voltar"
+                    android:textAllCaps="false"
+                    android:textColor="#294B50"
+                    android:textSize="14sp"
+                    app:backgroundTint="#FFFFFF"
+                    app:cornerRadius="16dp"
+                    app:strokeColor="#6BC2C8"
+                    app:strokeWidth="1dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <LinearLayout
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bottom_nav_background"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:weightSum="6">
+
+        <FrameLayout android:id="@+id/navHomeContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navHomeIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/home_simbolo" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/navContaContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navContaIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/minhaconta_menu" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/navChatContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navChatIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/chat_menu" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/navFavoritosContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navFavoritosIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/favoritos_menu" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/navNotificacoesContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navNotificacoesIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/notificacao_menu" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/navSairContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navSairIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/logoout_menu" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

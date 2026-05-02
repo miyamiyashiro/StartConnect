@@ -1,7 +1,15 @@
 package com.example.startconnect
 
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.view.Window
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -10,6 +18,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +28,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class HomeInvestidorActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
+    private var usuarioId: Int = -1
+    private var usuarioTipo: String = "Investidor"
+    private var allStartups: List<Startup> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +43,21 @@ class HomeInvestidorActivity : AppCompatActivity() {
             insets
         }
 
+        usuarioId = intent.getIntExtra("usuarioId", -1)
+        usuarioTipo = intent.getStringExtra("usuarioTipo") ?: "Investidor"
+
         setupRecyclerView()
+        setupSearch()
         fetchStartups()
         setupBottomNavigation()
+        loadProfilePhoto()
+    }
+
+    private fun loadProfilePhoto() {
+        val bitmap = ProfilePhotoHelper.getPhotoBitmap(this, usuarioId)
+        if (bitmap != null) {
+            findViewById<ImageView>(R.id.imgHeaderProfile).setImageBitmap(bitmap)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -41,9 +65,41 @@ class HomeInvestidorActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
+    private fun setupSearch() {
+        val searchEditText = findViewById<EditText>(R.id.searchEditText)
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                val query = s.toString().trim().lowercase()
+                if (query.isEmpty()) {
+                    showStartups(allStartups)
+                } else {
+                    val filtered = allStartups.filter { startup ->
+                        startup.nome.lowercase().contains(query) ||
+                        startup.segmento.lowercase().contains(query) ||
+                        startup.subtitulo.lowercase().contains(query) ||
+                        startup.tags.any { it.lowercase().contains(query) }
+                    }
+                    showStartups(filtered)
+                }
+            }
+        })
+    }
+
+    private fun showStartups(startups: List<Startup>) {
+        recyclerView.adapter = StartupAdapter(startups) { startup ->
+            val intent = Intent(this@HomeInvestidorActivity, StartupDetalhesActivity::class.java)
+            intent.putExtra("startupId", startup.startupId)
+            intent.putExtra("usuarioId", usuarioId)
+            intent.putExtra("usuarioTipo", usuarioTipo)
+            startActivity(intent)
+        }
+    }
+
     private fun fetchStartups() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.102/")
+            .baseUrl("http://10.0.2.2:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -55,8 +111,9 @@ class HomeInvestidorActivity : AppCompatActivity() {
                 response: Response<List<StartupResponse>>
             ) {
                 if (response.isSuccessful && response.body() != null) {
-                    val startups = response.body()!!.map { startup ->
+                    allStartups = response.body()!!.map { startup ->
                         Startup(
+                            startupId = startup.startupId,
                             nome = startup.nome,
                             segmento = startup.segmento,
                             subtitulo = startup.subtitulo,
@@ -69,7 +126,7 @@ class HomeInvestidorActivity : AppCompatActivity() {
                         )
                     }
 
-                    recyclerView.adapter = StartupAdapter(startups)
+                    showStartups(allStartups)
                 } else {
                     Toast.makeText(this@HomeInvestidorActivity, "Erro ao carregar startups", Toast.LENGTH_LONG).show()
                 }
@@ -110,12 +167,73 @@ class HomeInvestidorActivity : AppCompatActivity() {
             }
         }
 
-        menuItems.forEach { (container, icon) ->
-            container.setOnClickListener {
-                selectItem(container, icon)
-            }
+        // Home -> ja esta aqui
+        findViewById<View>(R.id.navHomeContainer).setOnClickListener {
+            selectItem(it, findViewById(R.id.navHomeIcon))
+        }
+
+        // Conta -> vai pra PerfilActivity
+        findViewById<View>(R.id.navContaContainer).setOnClickListener {
+            val intent = Intent(this, PerfilActivity::class.java)
+            intent.putExtra("usuarioId", usuarioId)
+            intent.putExtra("usuarioTipo", usuarioTipo)
+            startActivity(intent)
+        }
+
+        // Chat -> vai pra ChatListActivity
+        findViewById<View>(R.id.navChatContainer).setOnClickListener {
+            val intent = Intent(this, ChatListActivity::class.java)
+            intent.putExtra("usuarioId", usuarioId)
+            intent.putExtra("usuarioTipo", usuarioTipo)
+            startActivity(intent)
+        }
+
+        // Favoritos -> vai pra FavoritosActivity
+        findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
+            val intent = Intent(this, FavoritosActivity::class.java)
+            intent.putExtra("usuarioId", usuarioId)
+            intent.putExtra("usuarioTipo", usuarioTipo)
+            startActivity(intent)
+        }
+
+        // Notificacoes -> vai pra NotificacoesActivity
+        findViewById<View>(R.id.navNotificacoesContainer).setOnClickListener {
+            val intent = Intent(this, NotificacoesActivity::class.java)
+            intent.putExtra("usuarioId", usuarioId)
+            intent.putExtra("usuarioTipo", usuarioTipo)
+            startActivity(intent)
+        }
+
+        // Sair -> dialog de logout
+        findViewById<View>(R.id.navSairContainer).setOnClickListener {
+            showLogoutDialog()
         }
 
         selectItem(findViewById(R.id.navHomeContainer), findViewById(R.id.navHomeIcon))
+    }
+
+    private fun showLogoutDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_logout)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.findViewById<MaterialButton>(R.id.btnConfirmarLogout).setOnClickListener {
+            dialog.dismiss()
+            val intent = Intent(this, IntroActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+
+        dialog.findViewById<MaterialButton>(R.id.btnCancelarLogout).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

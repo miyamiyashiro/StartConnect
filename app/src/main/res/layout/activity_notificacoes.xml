@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/notificacoesRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_home_gradient"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Header teal com foto e @tipo -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/foto_grupo"
+            app:shapeAppearanceOverlay="@style/CircleImage" />
+
+        <TextView
+            android:id="@+id/txtNotifTipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="\@Investidor"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <!-- Card teal principal -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/card_verde"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Titulo Notificacoes -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="Notificações"
+            android:textColor="#1A1F2B"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Contador -->
+        <TextView
+            android:id="@+id/txtNotifContador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Você têm 0 novas\nnotificações"
+            android:textColor="#1A1F2B"
+            android:textSize="14sp" />
+
+        <!-- Lista de notificacoes -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/notificacoesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:scrollbars="none" />
+
+        <!-- Estado vazio -->
+        <TextView
+            android:id="@+id/txtNotifVazio"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Nenhuma notificação ainda."
+            android:textColor="#1A1F2B"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!-- Bottom Navigation -->
+    <LinearLayout
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bottom_nav_background"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:weightSum="6">
+
+        <FrameLayout android:id="@+id/navHomeContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navHomeIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/home_simbolo" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/navContaContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navContaIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/minhaconta_menu" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/navChatContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navChatIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/chat_menu" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/navFavoritosContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navFavoritosIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/favoritos_menu" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/navNotificacoesContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navNotificacoesIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/notificacao_menu" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+        <FrameLayout android:id="@+id/navSairContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/navSairIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/logoout_menu" app:tint="@color/bottom_nav_icon_tint" />
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

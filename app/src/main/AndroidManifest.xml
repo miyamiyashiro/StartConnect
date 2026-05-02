@@ -42,6 +42,24 @@
             android:name=".CreateStartupActivity"
             android:exported="false" />
         <activity
+            android:name=".PerfilActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StartupDetalhesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FavoritosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatConversaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NotificacoesActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeInvestidorActivity"
             android:exported="false" />
         <activity

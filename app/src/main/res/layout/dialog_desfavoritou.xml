@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_verde"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+    <ImageView
+        android:id="@+id/btnFecharDesfavoritou"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="end"
+        android:contentDescription="Fechar"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:tint="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/txtDesfavoritouMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="${Startup}\ndesfavoritado\ncom sucesso"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="italic" />
+</LinearLayout>
