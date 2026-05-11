@@ -1,7 +1,13 @@
 package com.example.startconnect
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -30,6 +36,15 @@ class LoginActivity : AppCompatActivity() {
         passwordEditText = findViewById(R.id.passwordEditText)
         val loginButton: Button = findViewById(R.id.loginButton)
         val goToRegisterText: TextView = findViewById(R.id.goToRegisterText)
+
+        // Deixa "aqui" em bold e branco forte
+        val texto = "Não tem uma conta? Clique aqui!"
+        val spannable = SpannableString(texto)
+        val inicio = texto.indexOf("aqui")
+        val fim = inicio + "aqui".length
+        spannable.setSpan(StyleSpan(Typeface.BOLD), inicio, fim, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(ForegroundColorSpan(Color.WHITE), inicio, fim, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        goToRegisterText.text = spannable
 
         goToRegisterText.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
