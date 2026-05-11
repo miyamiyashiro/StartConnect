@@ -4,15 +4,40 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4B2C7F">
+    android:background="@drawable/bg_intro_gradient">
 
-    <ImageView
-        android:id="@+id/logoGrande"
-        android:layout_width="392dp"
-        android:layout_height="528dp"
+    <!-- Bloco central: logo + slogan -->
+    <LinearLayout
+        android:id="@+id/blocoLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/logo_sc_branco" />
+        android:orientation="vertical"
+        android:gravity="center">
 
+        <ImageView
+            android:id="@+id/logoGrande"
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:src="@drawable/logo_sc_branco"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="TUDO COMEÇA COM\nUMA CONEXÃO"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:letterSpacing="0.25"
+            android:gravity="center"
+            android:fontFamily="@font/montserrat"
+            android:textStyle="bold"
+            android:alpha="1.0" />
+
+    </LinearLayout>
+
+    <!-- Botões na base -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,23 +49,25 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnIrLogin"
             android:layout_width="150dp"
-            android:layout_height="64dp"
+            android:layout_height="52dp"
             android:layout_marginEnd="10dp"
-            android:backgroundTint="#1A1F2B"
+            android:backgroundTint="#1A7A6E"
             android:text="ENTRAR"
             android:textColor="#FFFFFF"
-            android:elevation="8dp"
-            app:cornerRadius="12dp" />
+            android:stateListAnimator="@null"
+            app:elevation="6dp"
+            app:cornerRadius="10dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnIrCadastro"
             android:layout_width="150dp"
-            android:layout_height="64dp"
+            android:layout_height="52dp"
             android:backgroundTint="#45A09E"
             android:text="CADASTRAR"
             android:textColor="#FFFFFF"
-            android:elevation="8dp"
-            app:cornerRadius="12dp" />
+            android:stateListAnimator="@null"
+            app:elevation="6dp"
+            app:cornerRadius="10dp" />
 
     </LinearLayout>
 
