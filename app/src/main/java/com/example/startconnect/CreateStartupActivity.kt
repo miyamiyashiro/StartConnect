@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.button.MaterialButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,6 +18,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class CreateStartupActivity : AppCompatActivity() {
+
+    private var usuarioId: Int = -1
+    private var startupId: Int = -1
+    private var isEditMode: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +35,30 @@ class CreateStartupActivity : AppCompatActivity() {
             insets
         }
 
-        val usuarioId = intent.getIntExtra("usuarioId", -1)
+        usuarioId = intent.getIntExtra("usuarioId", -1)
+        startupId = intent.getIntExtra("startupId", -1)
+        isEditMode = startupId != -1
 
         val etNomeStartup = findViewById<EditText>(R.id.etNomeStartup)
         val etDescricaoStartup = findViewById<EditText>(R.id.etDescricaoStartup)
         val etAreaStartup = findViewById<EditText>(R.id.etAreaStartup)
         val etTagsStartup = findViewById<EditText>(R.id.etTagsStartup)
         val btnSalvarStartup = findViewById<MaterialButton>(R.id.btnSalvarStartup)
+        val txtCreateStartupTitle = findViewById<TextView>(R.id.txtCreateStartupTitle)
+        val txtCreateStartupHandle = findViewById<TextView>(R.id.txtCreateStartupHandle)
+
+        loadProfileInfo(txtCreateStartupHandle)
+
+        if (isEditMode) {
+            txtCreateStartupTitle.text = "Editar\nStartup"
+            btnSalvarStartup.text = "Salvar Alterações"
+            etNomeStartup.setText(intent.getStringExtra("startupNome").orEmpty())
+            etDescricaoStartup.setText(intent.getStringExtra("startupSubtitulo").orEmpty())
+            etAreaStartup.setText(intent.getStringExtra("startupSegmento").orEmpty())
+
+            val tags = intent.getStringArrayListExtra("startupTags").orEmpty()
+            etTagsStartup.setText(tags.joinToString(", "))
+        }
 
         btnSalvarStartup.setOnClickListener {
             val nome = etNomeStartup.text.toString().trim()
@@ -69,17 +91,32 @@ class CreateStartupActivity : AppCompatActivity() {
                 .build()
 
             val apiService = retrofit.create(ApiService::class.java)
+            val subtitulo = if (descricao.isBlank()) "Clique para ver mais" else descricao
 
-            val call = apiService.registerStartup(
-                usuarioId = usuarioId,
-                nome = nome,
-                segmento = segmento,
-                subtitulo = if (descricao.isBlank()) "Clique para ver mais" else descricao,
-                tag1 = tag1,
-                tag2 = tag2,
-                tag3 = tag3,
-                tag4 = tag4
-            )
+            val call = if (isEditMode) {
+                apiService.updateStartup(
+                    startupId = startupId,
+                    usuarioId = usuarioId,
+                    nome = nome,
+                    segmento = segmento,
+                    subtitulo = subtitulo,
+                    tag1 = tag1,
+                    tag2 = tag2,
+                    tag3 = tag3,
+                    tag4 = tag4
+                )
+            } else {
+                apiService.registerStartup(
+                    usuarioId = usuarioId,
+                    nome = nome,
+                    segmento = segmento,
+                    subtitulo = subtitulo,
+                    tag1 = tag1,
+                    tag2 = tag2,
+                    tag3 = tag3,
+                    tag4 = tag4
+                )
+            }
 
             call.enqueue(object : Callback<StartupRegisterResponse> {
                 override fun onResponse(
@@ -120,6 +157,28 @@ class CreateStartupActivity : AppCompatActivity() {
         setupBottomNavigation()
     }
 
+    private fun loadProfileInfo(handleTextView: TextView) {
+        if (usuarioId == -1) return
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val apiService = retrofit.create(ApiService::class.java)
+        apiService.getPerfil(usuarioId).enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    handleTextView.text = "@${response.body()!!.usuarioNome}"
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                handleTextView.text = "@Empreendedor"
+            }
+        })
+    }
+
     private fun setupBottomNavigation() {
         val menuItems = listOf(
             findViewById<View>(R.id.navHomeContainer) to findViewById<ImageView>(R.id.navHomeIcon),
@@ -158,3 +217,4 @@ class CreateStartupActivity : AppCompatActivity() {
         selectItem(findViewById(R.id.navHomeContainer), findViewById(R.id.navHomeIcon))
     }
 }
+

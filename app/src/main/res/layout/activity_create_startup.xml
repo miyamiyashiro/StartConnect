@@ -14,35 +14,16 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/card_verde"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="16dp">
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:src="@drawable/foto_vazia" />
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="bottom|end"
-                android:background="@drawable/bg_circular_editar"
-                android:contentDescription="Editar foto"
-                android:padding="5dp"
-                android:src="@drawable/editar_simbolo" />
-        </FrameLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/txtCreateStartupTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nova&#10;Startup"
@@ -50,6 +31,7 @@
                 android:textSize="28sp" />
 
             <TextView
+                android:id="@+id/txtCreateStartupHandle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="\@Empreendedor"

@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 
 class StartupAdapter(
     private val startups: List<Startup>,
-    private val onItemClick: ((Startup) -> Unit)? = null
+    private val onItemClick: ((Startup) -> Unit)? = null,
+    private val showEditAction: Boolean = false,
+    private val onEditClick: ((Startup) -> Unit)? = null
 ) : RecyclerView.Adapter<StartupAdapter.StartupViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StartupViewHolder {
@@ -19,7 +21,7 @@ class StartupAdapter(
 
     override fun onBindViewHolder(holder: StartupViewHolder, position: Int) {
         val startup = startups[position]
-        holder.bind(startup)
+        holder.bind(startup, showEditAction, onEditClick)
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(startup)
         }
@@ -30,6 +32,7 @@ class StartupAdapter(
     class StartupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleText: TextView = itemView.findViewById(R.id.startupTitleText)
         private val subtitleText: TextView = itemView.findViewById(R.id.startupSubtitleText)
+        private val editIcon: View = itemView.findViewById(R.id.startupEditIcon)
         private val tagViews: List<TextView> = listOf(
             itemView.findViewById(R.id.tagOneText),
             itemView.findViewById(R.id.tagTwoText),
@@ -37,7 +40,11 @@ class StartupAdapter(
             itemView.findViewById(R.id.tagFourText)
         )
 
-        fun bind(startup: Startup) {
+        fun bind(
+            startup: Startup,
+            showEditAction: Boolean,
+            onEditClick: ((Startup) -> Unit)?
+        ) {
             titleText.text = "${startup.nome} (${startup.segmento})"
             subtitleText.text = startup.subtitulo
 
@@ -50,6 +57,15 @@ class StartupAdapter(
                     textView.text = tag
                 }
             }
+
+            if (showEditAction) {
+                editIcon.visibility = View.VISIBLE
+                editIcon.setOnClickListener { onEditClick?.invoke(startup) }
+            } else {
+                editIcon.visibility = View.GONE
+                editIcon.setOnClickListener(null)
+            }
         }
     }
 }
+

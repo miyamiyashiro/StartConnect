@@ -222,4 +222,19 @@ interface ApiService {
     fun getNotificacoes(
         @Query("usuario_id") usuarioId: Int
     ): Call<List<NotificacaoResponse>>
+
+    @FormUrlEncoded
+    @POST("/meu_projeto_pi/editar_startup.php")
+    fun updateStartup(
+        @Field("startup_id") startupId: Int,
+        @Field("usuario_id") usuarioId: Int,
+        @Field("nome") nome: String,
+        @Field("segmento") segmento: String,
+        @Field("subtitulo") subtitulo: String,
+        @Field("tag1") tag1: String,
+        @Field("tag2") tag2: String,
+        @Field("tag3") tag3: String,
+        @Field("tag4") tag4: String
+    ): Call<StartupRegisterResponse>
+
 }

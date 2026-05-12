@@ -29,6 +29,7 @@ class AddStartupActivity : AppCompatActivity() {
     private lateinit var emptyStateLayout: LinearLayout
     private lateinit var btnAbrirAddStartup: MaterialButton
     private lateinit var btnAbrirAddStartupFooter: MaterialButton
+    private lateinit var txtHeaderHandle: TextView
     private var usuarioId: Int = -1
     private var usuarioTipo: String = "Empreendedor"
 
@@ -46,31 +47,66 @@ class AddStartupActivity : AppCompatActivity() {
 
         usuarioId = intent.getIntExtra("usuarioId", -1)
         usuarioTipo = intent.getStringExtra("usuarioTipo") ?: "Empreendedor"
+
         recyclerView = findViewById(R.id.entrepreneurStartupsRecyclerView)
         emptyStateLayout = findViewById(R.id.emptyStateLayout)
         btnAbrirAddStartup = findViewById(R.id.btnAbrirAddStartup)
         btnAbrirAddStartupFooter = findViewById(R.id.btnAbrirAddStartupFooter)
+        txtHeaderHandle = findViewById(R.id.txtHeaderHandle)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val openCreateStartup = {
+        val openCreateStartup: (Startup?) -> Unit = { startup ->
             val intent = Intent(this, CreateStartupActivity::class.java)
             intent.putExtra("usuarioId", usuarioId)
+
+            if (startup != null) {
+                intent.putExtra("startupId", startup.startupId)
+                intent.putExtra("startupNome", startup.nome)
+                intent.putExtra("startupSegmento", startup.segmento)
+                intent.putExtra("startupSubtitulo", startup.subtitulo)
+                intent.putStringArrayListExtra("startupTags", ArrayList(startup.tags))
+            }
+
             startActivity(intent)
         }
 
-        btnAbrirAddStartup.setOnClickListener { openCreateStartup() }
-        btnAbrirAddStartupFooter.setOnClickListener { openCreateStartup() }
+        btnAbrirAddStartup.setOnClickListener { openCreateStartup(null) }
+        btnAbrirAddStartupFooter.setOnClickListener { openCreateStartup(null) }
 
         loadProfilePhoto()
+        loadProfileInfo()
         setupBottomNavigation()
     }
 
     private fun loadProfilePhoto() {
         val bitmap = ProfilePhotoHelper.getPhotoBitmap(this, usuarioId)
         if (bitmap != null) {
-            findViewById<android.widget.ImageView>(R.id.imgHeaderProfile).setImageBitmap(bitmap)
+            findViewById<ImageView>(R.id.imgHeaderProfile).setImageBitmap(bitmap)
         }
+    }
+
+    private fun loadProfileInfo() {
+        if (usuarioId == -1) return
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://192.168.0.166/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val apiService = retrofit.create(ApiService::class.java)
+        apiService.getPerfil(usuarioId).enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val usuario = response.body()!!
+                    txtHeaderHandle.text = "@${usuario.usuarioNome}"
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                txtHeaderHandle.text = "@Empreendedor"
+            }
+        })
     }
 
     override fun onResume() {
@@ -119,7 +155,20 @@ class AddStartupActivity : AppCompatActivity() {
                         emptyStateLayout.visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
                         btnAbrirAddStartupFooter.visibility = View.VISIBLE
-                        recyclerView.adapter = StartupAdapter(startups)
+                        recyclerView.adapter = StartupAdapter(
+                            startups = startups,
+                            showEditAction = true,
+                            onEditClick = { startup ->
+                                val intent = Intent(this@AddStartupActivity, CreateStartupActivity::class.java)
+                                intent.putExtra("usuarioId", usuarioId)
+                                intent.putExtra("startupId", startup.startupId)
+                                intent.putExtra("startupNome", startup.nome)
+                                intent.putExtra("startupSegmento", startup.segmento)
+                                intent.putExtra("startupSubtitulo", startup.subtitulo)
+                                intent.putStringArrayListExtra("startupTags", ArrayList(startup.tags))
+                                startActivity(intent)
+                            }
+                        )
                     }
                 } else {
                     Toast.makeText(this@AddStartupActivity, "Erro ao carregar startups", Toast.LENGTH_LONG).show()
@@ -127,10 +176,11 @@ class AddStartupActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<StartupResponse>>, t: Throwable) {
-                Toast.makeText(this@AddStartupActivity, "Falha na conexao: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@AddStartupActivity, "Falha na conexão: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
     }
+
     private fun setupBottomNavigation() {
         val menuItems = listOf(
             findViewById<View>(R.id.navHomeContainer) to findViewById<ImageView>(R.id.navHomeIcon),
@@ -160,12 +210,10 @@ class AddStartupActivity : AppCompatActivity() {
             }
         }
 
-        // Home -> ja esta aqui
         findViewById<View>(R.id.navHomeContainer).setOnClickListener {
             selectItem(it, findViewById(R.id.navHomeIcon))
         }
 
-        // Conta -> vai pra PerfilActivity
         findViewById<View>(R.id.navContaContainer).setOnClickListener {
             val intent = Intent(this, PerfilActivity::class.java)
             intent.putExtra("usuarioId", usuarioId)
@@ -173,7 +221,6 @@ class AddStartupActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Chat -> vai pra ChatListActivity
         findViewById<View>(R.id.navChatContainer).setOnClickListener {
             val intent = Intent(this, ChatListActivity::class.java)
             intent.putExtra("usuarioId", usuarioId)
@@ -181,7 +228,6 @@ class AddStartupActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Favoritos -> vai pra FavoritosActivity
         findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
             val intent = Intent(this, FavoritosActivity::class.java)
             intent.putExtra("usuarioId", usuarioId)
@@ -189,7 +235,6 @@ class AddStartupActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Notificacoes -> vai pra NotificacoesActivity
         findViewById<View>(R.id.navNotificacoesContainer).setOnClickListener {
             val intent = Intent(this, NotificacoesActivity::class.java)
             intent.putExtra("usuarioId", usuarioId)
@@ -197,7 +242,6 @@ class AddStartupActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Sair -> dialog de logout
         findViewById<View>(R.id.navSairContainer).setOnClickListener {
             showLogoutDialog()
         }
