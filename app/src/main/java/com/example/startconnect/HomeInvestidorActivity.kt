@@ -75,9 +75,12 @@ class HomeInvestidorActivity : AppCompatActivity() {
         val searchEditText = findViewById<EditText>(R.id.searchEditText)
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
             override fun afterTextChanged(s: Editable?) {
                 val query = s.toString().trim().lowercase()
+
                 if (query.isEmpty()) {
                     showStartups(allStartups)
                 } else {
@@ -94,13 +97,16 @@ class HomeInvestidorActivity : AppCompatActivity() {
     }
 
     private fun showStartups(startups: List<Startup>) {
-        recyclerView.adapter = StartupAdapter(startups) { startup ->
-            val intent = Intent(this@HomeInvestidorActivity, StartupDetalhesActivity::class.java)
-            intent.putExtra("startupId", startup.startupId)
-            intent.putExtra("usuarioId", usuarioId)
-            intent.putExtra("usuarioTipo", usuarioTipo)
-            startActivity(intent)
-        }
+        recyclerView.adapter = StartupAdapter(
+            startups = startups,
+            onItemClick = { startup ->
+                val intent = Intent(this@HomeInvestidorActivity, StartupDetalhesActivity::class.java)
+                intent.putExtra("startupId", startup.startupId)
+                intent.putExtra("usuarioId", usuarioId)
+                intent.putExtra("usuarioTipo", usuarioTipo)
+                startActivity(intent)
+            }
+        )
     }
 
     private fun fetchStartups() {
@@ -134,12 +140,20 @@ class HomeInvestidorActivity : AppCompatActivity() {
 
                     showStartups(allStartups)
                 } else {
-                    Toast.makeText(this@HomeInvestidorActivity, "Erro ao carregar startups", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@HomeInvestidorActivity,
+                        "Erro ao carregar startups",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<List<StartupResponse>>, t: Throwable) {
-                Toast.makeText(this@HomeInvestidorActivity, "Falha na conexão: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@HomeInvestidorActivity,
+                    "Falha na conexão: ${t.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         })
     }

@@ -76,7 +76,10 @@ class FavoritosActivity : AppCompatActivity() {
     private fun fetchFavoritos() {
         val apiService = getRetrofit().create(ApiService::class.java)
         apiService.getFavoritos(usuarioId).enqueue(object : Callback<List<StartupResponse>> {
-            override fun onResponse(call: Call<List<StartupResponse>>, response: Response<List<StartupResponse>>) {
+            override fun onResponse(
+                call: Call<List<StartupResponse>>,
+                response: Response<List<StartupResponse>>
+            ) {
                 if (response.isSuccessful && response.body() != null) {
                     val startups = response.body()!!.map { s ->
                         Startup(
@@ -99,9 +102,12 @@ class FavoritosActivity : AppCompatActivity() {
                     } else {
                         findViewById<TextView>(R.id.txtFavoritosVazio).visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
-                        recyclerView.adapter = StartupAdapter(startups) { startup ->
-                            showDesfavoritarDialog(startup)
-                        }
+                        recyclerView.adapter = StartupAdapter(
+                            startups = startups,
+                            onItemClick = { startup ->
+                                showDesfavoritarDialog(startup)
+                            }
+                        )
                     }
                 }
             }
@@ -131,18 +137,26 @@ class FavoritosActivity : AppCompatActivity() {
 
         dialog.findViewById<MaterialButton>(R.id.btnConfirmarDesfavoritar).setOnClickListener {
             val apiService = getRetrofit().create(ApiService::class.java)
-            apiService.desfavoritar(usuarioId, startup.startupId).enqueue(object : Callback<RegisterResponse> {
-                override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
-                    if (response.isSuccessful && response.body()?.success == true) {
-                        dialog.dismiss()
-                        showDesfavoritouDialog(startup.nome)
+            apiService.desfavoritar(usuarioId, startup.startupId)
+                .enqueue(object : Callback<RegisterResponse> {
+                    override fun onResponse(
+                        call: Call<RegisterResponse>,
+                        response: Response<RegisterResponse>
+                    ) {
+                        if (response.isSuccessful && response.body()?.success == true) {
+                            dialog.dismiss()
+                            showDesfavoritouDialog(startup.nome)
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                    Toast.makeText(this@FavoritosActivity, "Falha: ${t.message}", Toast.LENGTH_LONG).show()
-                }
-            })
+                    override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                        Toast.makeText(
+                            this@FavoritosActivity,
+                            "Falha: ${t.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
         }
 
         dialog.show()
@@ -184,36 +198,69 @@ class FavoritosActivity : AppCompatActivity() {
                 val isSelected = container == selectedContainer
                 container.isSelected = isSelected
                 icon.isSelected = isSelected
-                container.animate().scaleX(if (isSelected) 1.08f else 1f).scaleY(if (isSelected) 1.08f else 1f).setDuration(180).start()
-                icon.animate().alpha(if (isSelected) 1f else 0.88f).setDuration(180).start()
+                container.animate()
+                    .scaleX(if (isSelected) 1.08f else 1f)
+                    .scaleY(if (isSelected) 1.08f else 1f)
+                    .setDuration(180)
+                    .start()
+                icon.animate()
+                    .alpha(if (isSelected) 1f else 0.88f)
+                    .setDuration(180)
+                    .start()
             }
         }
 
         findViewById<View>(R.id.navHomeContainer).setOnClickListener {
-            val dest = if (usuarioTipo.equals("Investidor", ignoreCase = true)) HomeInvestidorActivity::class.java else AddStartupActivity::class.java
+            val dest = if (usuarioTipo.equals("Investidor", ignoreCase = true)) {
+                HomeInvestidorActivity::class.java
+            } else {
+                AddStartupActivity::class.java
+            }
+
             val intent = Intent(this, dest)
             intent.putExtra("usuarioId", usuarioId)
             intent.putExtra("usuarioTipo", usuarioTipo)
             startActivity(intent)
             finish()
         }
+
         findViewById<View>(R.id.navContaContainer).setOnClickListener {
-            startActivity(Intent(this, PerfilActivity::class.java).putExtra("usuarioId", usuarioId).putExtra("usuarioTipo", usuarioTipo))
+            startActivity(
+                Intent(this, PerfilActivity::class.java)
+                    .putExtra("usuarioId", usuarioId)
+                    .putExtra("usuarioTipo", usuarioTipo)
+            )
         }
+
         findViewById<View>(R.id.navChatContainer).setOnClickListener {
-            startActivity(Intent(this, ChatListActivity::class.java).putExtra("usuarioId", usuarioId).putExtra("usuarioTipo", usuarioTipo))
+            startActivity(
+                Intent(this, ChatListActivity::class.java)
+                    .putExtra("usuarioId", usuarioId)
+                    .putExtra("usuarioTipo", usuarioTipo)
+            )
         }
+
         findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
             selectItem(it, findViewById(R.id.navFavoritosIcon))
         }
+
         findViewById<View>(R.id.navNotificacoesContainer).setOnClickListener {
-            startActivity(Intent(this, NotificacoesActivity::class.java).putExtra("usuarioId", usuarioId).putExtra("usuarioTipo", usuarioTipo))
+            startActivity(
+                Intent(this, NotificacoesActivity::class.java)
+                    .putExtra("usuarioId", usuarioId)
+                    .putExtra("usuarioTipo", usuarioTipo)
+            )
         }
+
         findViewById<View>(R.id.navSairContainer).setOnClickListener {
-            startActivity(Intent(this, IntroActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            startActivity(
+                Intent(this, IntroActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            )
             finish()
         }
 
         selectItem(findViewById(R.id.navFavoritosContainer), findViewById(R.id.navFavoritosIcon))
     }
 }
+
