@@ -19,13 +19,14 @@
         android:paddingBottom="12dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgPerfilChat"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/foto_grupo"
+            android:id="@+id/imgHeaderProfile"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:src="@drawable/foto_vazia"
             app:shapeAppearanceOverlay="@style/CircleImage"
             app:strokeColor="#2E4B43"
             app:strokeWidth="2dp" />
+
 
         <TextView
             android:id="@+id/txtChatTipo"
