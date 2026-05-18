@@ -51,12 +51,18 @@ class HomeInvestidorActivity : AppCompatActivity() {
         fetchStartups()
         setupBottomNavigation()
         loadProfilePhoto()
+
+        findViewById<View>(R.id.btnHeaderProfileEdit).setOnClickListener {
+            openPerfil()
+        }
     }
 
     private fun loadProfilePhoto() {
         val bitmap = ProfilePhotoHelper.getPhotoBitmap(this, usuarioId)
         if (bitmap != null) {
             findViewById<ImageView>(R.id.imgHeaderProfile).setImageBitmap(bitmap)
+        } else {
+            findViewById<ImageView>(R.id.imgHeaderProfile).setImageResource(R.drawable.foto_vazia)
         }
     }
 
@@ -77,9 +83,9 @@ class HomeInvestidorActivity : AppCompatActivity() {
                 } else {
                     val filtered = allStartups.filter { startup ->
                         startup.nome.lowercase().contains(query) ||
-                        startup.segmento.lowercase().contains(query) ||
-                        startup.subtitulo.lowercase().contains(query) ||
-                        startup.tags.any { it.lowercase().contains(query) }
+                                startup.segmento.lowercase().contains(query) ||
+                                startup.subtitulo.lowercase().contains(query) ||
+                                startup.tags.any { it.lowercase().contains(query) }
                     }
                     showStartups(filtered)
                 }
@@ -167,20 +173,14 @@ class HomeInvestidorActivity : AppCompatActivity() {
             }
         }
 
-        // Home -> ja esta aqui
         findViewById<View>(R.id.navHomeContainer).setOnClickListener {
             selectItem(it, findViewById(R.id.navHomeIcon))
         }
 
-        // Conta -> vai pra PerfilActivity
         findViewById<View>(R.id.navContaContainer).setOnClickListener {
-            val intent = Intent(this, PerfilActivity::class.java)
-            intent.putExtra("usuarioId", usuarioId)
-            intent.putExtra("usuarioTipo", usuarioTipo)
-            startActivity(intent)
+            openPerfil()
         }
 
-        // Chat -> vai pra ChatListActivity
         findViewById<View>(R.id.navChatContainer).setOnClickListener {
             val intent = Intent(this, ChatListActivity::class.java)
             intent.putExtra("usuarioId", usuarioId)
@@ -188,7 +188,6 @@ class HomeInvestidorActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Favoritos -> vai pra FavoritosActivity
         findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
             val intent = Intent(this, FavoritosActivity::class.java)
             intent.putExtra("usuarioId", usuarioId)
@@ -196,7 +195,6 @@ class HomeInvestidorActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Notificacoes -> vai pra NotificacoesActivity
         findViewById<View>(R.id.navNotificacoesContainer).setOnClickListener {
             val intent = Intent(this, NotificacoesActivity::class.java)
             intent.putExtra("usuarioId", usuarioId)
@@ -204,12 +202,18 @@ class HomeInvestidorActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Sair -> dialog de logout
         findViewById<View>(R.id.navSairContainer).setOnClickListener {
             showLogoutDialog()
         }
 
         selectItem(findViewById(R.id.navHomeContainer), findViewById(R.id.navHomeIcon))
+    }
+
+    private fun openPerfil() {
+        val intent = Intent(this, PerfilActivity::class.java)
+        intent.putExtra("usuarioId", usuarioId)
+        intent.putExtra("usuarioTipo", usuarioTipo)
+        startActivity(intent)
     }
 
     private fun showLogoutDialog() {

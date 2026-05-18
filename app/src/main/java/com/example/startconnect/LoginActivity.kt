@@ -198,6 +198,12 @@ interface ApiService {
         @Query("usuario_id") usuarioId: Int
     ): Call<List<StartupResponse>>
 
+    @GET("/meu_projeto_pi/listar_conexoes.php")
+    fun getConexoes(
+        @Query("usuario_id") usuarioId: Int
+    ): Call<List<ConexaoResponse>>
+
+
     @GET("/meu_projeto_pi/listar_chats.php")
     fun getChats(
         @Query("usuario_id") usuarioId: Int
@@ -217,6 +223,13 @@ interface ApiService {
         @Field("startup_id") startupId: Int,
         @Field("texto") texto: String
     ): Call<RegisterResponse>
+
+    @FormUrlEncoded
+    @POST("/meu_projeto_pi/apagar_startup.php")
+    fun deleteStartup(
+        @Field("startup_id") startupId: Int,
+        @Field("usuario_id") usuarioId: Int
+    ): Call<StartupRegisterResponse>
 
     @GET("/meu_projeto_pi/listar_notificacoes.php")
     fun getNotificacoes(

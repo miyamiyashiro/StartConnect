@@ -28,10 +28,14 @@
                 android:src="@drawable/foto_vazia" />
 
             <ImageView
+                android:id="@+id/btnHeaderProfileEdit"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_gravity="bottom|end"
                 android:background="@drawable/bg_circular_editar"
+                android:clickable="true"
+                android:contentDescription="Ir para perfil"
+                android:focusable="true"
                 android:padding="5dp"
                 android:src="@drawable/editar_simbolo" />
         </FrameLayout>

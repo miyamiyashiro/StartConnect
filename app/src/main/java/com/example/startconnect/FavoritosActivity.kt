@@ -43,6 +43,16 @@ class FavoritosActivity : AppCompatActivity() {
         usuarioId = intent.getIntExtra("usuarioId", -1)
         usuarioTipo = intent.getStringExtra("usuarioTipo") ?: ""
 
+        if (!usuarioTipo.equals("Investidor", ignoreCase = true)) {
+            startActivity(
+                Intent(this, ConexoesActivity::class.java)
+                    .putExtra("usuarioId", usuarioId)
+                    .putExtra("usuarioTipo", usuarioTipo)
+            )
+            finish()
+            return
+        }
+
         findViewById<TextView>(R.id.txtFavTipo).text = "@${usuarioTipo.lowercase()}"
 
         recyclerView = findViewById(R.id.favoritosRecyclerView)

@@ -210,7 +210,12 @@ class StartupDetalhesActivity : AppCompatActivity() {
             startActivity(intent)
         }
         findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
-            val intent = Intent(this, FavoritosActivity::class.java)
+            val destination = if (usuarioTipo.equals("Investidor", ignoreCase = true)) {
+                FavoritosActivity::class.java
+            } else {
+                ConexoesActivity::class.java
+            }
+            val intent = Intent(this, destination)
             intent.putExtra("usuarioId", usuarioId)
             intent.putExtra("usuarioTipo", usuarioTipo)
             startActivity(intent)

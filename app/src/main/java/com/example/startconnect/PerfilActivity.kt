@@ -31,13 +31,14 @@ class PerfilActivity : AppCompatActivity() {
     private var usuarioTipo: String = ""
     private lateinit var profileImage: ShapeableImageView
 
-    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            ProfilePhotoHelper.savePhoto(this, usuarioId, it)
-            loadProfilePhoto()
-            Toast.makeText(this, "Foto atualizada!", Toast.LENGTH_SHORT).show()
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                ProfilePhotoHelper.savePhoto(this, usuarioId, it)
+                loadProfilePhoto()
+                Toast.makeText(this, "Foto atualizada!", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +55,8 @@ class PerfilActivity : AppCompatActivity() {
         usuarioTipo = intent.getStringExtra("usuarioTipo") ?: ""
 
         profileImage = findViewById(R.id.imgPerfil)
-        profileImage.setOnClickListener {
+
+        findViewById<View>(R.id.btnEditarFotoPerfil).setOnClickListener {
             pickImageLauncher.launch("image/*")
         }
 
@@ -80,6 +82,8 @@ class PerfilActivity : AppCompatActivity() {
         val bitmap = ProfilePhotoHelper.getPhotoBitmap(this, usuarioId)
         if (bitmap != null) {
             profileImage.setImageBitmap(bitmap)
+        } else {
+            profileImage.setImageResource(R.drawable.foto_vazia)
         }
     }
 
@@ -102,7 +106,11 @@ class PerfilActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Toast.makeText(this@PerfilActivity, "Falha na conexao: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@PerfilActivity,
+                    "Falha na conexao: ${t.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         })
     }
@@ -141,21 +149,33 @@ class PerfilActivity : AppCompatActivity() {
             }
 
             val apiService = getRetrofit().create(ApiService::class.java)
-            apiService.alterarSenha(usuarioId, senhaAtual, novaSenha).enqueue(object : Callback<RegisterResponse> {
-                override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
-                    if (response.isSuccessful && response.body() != null) {
-                        val resp = response.body()!!
-                        Toast.makeText(this@PerfilActivity, resp.message, Toast.LENGTH_LONG).show()
-                        if (resp.success) {
-                            dialog.dismiss()
+            apiService.alterarSenha(usuarioId, senhaAtual, novaSenha)
+                .enqueue(object : Callback<RegisterResponse> {
+                    override fun onResponse(
+                        call: Call<RegisterResponse>,
+                        response: Response<RegisterResponse>
+                    ) {
+                        if (response.isSuccessful && response.body() != null) {
+                            val resp = response.body()!!
+                            Toast.makeText(
+                                this@PerfilActivity,
+                                resp.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                            if (resp.success) {
+                                dialog.dismiss()
+                            }
                         }
                     }
-                }
 
-                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                    Toast.makeText(this@PerfilActivity, "Falha na conexao: ${t.message}", Toast.LENGTH_LONG).show()
-                }
-            })
+                    override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                        Toast.makeText(
+                            this@PerfilActivity,
+                            "Falha na conexao: ${t.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
         }
 
         dialog.show()
@@ -182,20 +202,31 @@ class PerfilActivity : AppCompatActivity() {
         dialog.findViewById<MaterialButton>(R.id.btnConfirmarApagar).setOnClickListener {
             val apiService = getRetrofit().create(ApiService::class.java)
             apiService.apagarConta(usuarioId).enqueue(object : Callback<RegisterResponse> {
-                override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                override fun onResponse(
+                    call: Call<RegisterResponse>,
+                    response: Response<RegisterResponse>
+                ) {
                     if (response.isSuccessful && response.body() != null) {
                         val resp = response.body()!!
                         if (resp.success) {
                             dialog.dismiss()
                             showContaApagadaDialog()
                         } else {
-                            Toast.makeText(this@PerfilActivity, resp.message, Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@PerfilActivity,
+                                resp.message,
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                    Toast.makeText(this@PerfilActivity, "Falha na conexao: ${t.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@PerfilActivity,
+                        "Falha na conexao: ${t.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             })
         }
@@ -278,27 +309,14 @@ class PerfilActivity : AppCompatActivity() {
                     .start()
             }
         }
-
-        // Home -> volta pra tela principal
-        findViewById<View>(R.id.navHomeContainer).setOnClickListener {
-            val destination = if (usuarioTipo.equals("Investidor", ignoreCase = true)) {
-                HomeInvestidorActivity::class.java
-            } else {
-                AddStartupActivity::class.java
-            }
-            val intent = Intent(this, destination)
-            intent.putExtra("usuarioId", usuarioId)
-            intent.putExtra("usuarioTipo", usuarioTipo)
-            startActivity(intent)
-            finish()
+        findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
+            openHeartDestination()
         }
 
-        // Conta -> ja esta aqui
         findViewById<View>(R.id.navContaContainer).setOnClickListener {
             selectItem(it, findViewById(R.id.navContaIcon))
         }
 
-        // Chat -> vai pra ChatListActivity
         findViewById<View>(R.id.navChatContainer).setOnClickListener {
             val intent = Intent(this, ChatListActivity::class.java)
             intent.putExtra("usuarioId", usuarioId)
@@ -306,7 +324,6 @@ class PerfilActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Favoritos -> vai pra FavoritosActivity
         findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
             val intent = Intent(this, FavoritosActivity::class.java)
             intent.putExtra("usuarioId", usuarioId)
@@ -314,7 +331,6 @@ class PerfilActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Notificacoes -> vai pra NotificacoesActivity
         findViewById<View>(R.id.navNotificacoesContainer).setOnClickListener {
             val intent = Intent(this, NotificacoesActivity::class.java)
             intent.putExtra("usuarioId", usuarioId)
@@ -322,12 +338,23 @@ class PerfilActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Sair -> logout
         findViewById<View>(R.id.navSairContainer).setOnClickListener {
             showLogoutDialog()
         }
 
-        // Seleciona Conta como ativo
         selectItem(findViewById(R.id.navContaContainer), findViewById(R.id.navContaIcon))
+    }
+
+    private fun openHeartDestination() {
+        val destination = if (usuarioTipo.equals("Investidor", ignoreCase = true)) {
+            FavoritosActivity::class.java
+        } else {
+            ConexoesActivity::class.java
+        }
+
+        val intent = Intent(this, destination)
+        intent.putExtra("usuarioId", usuarioId)
+        intent.putExtra("usuarioTipo", usuarioTipo)
+        startActivity(intent)
     }
 }

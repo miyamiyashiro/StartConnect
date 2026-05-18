@@ -29,14 +29,17 @@
                 android:layout_height="56dp"
                 android:contentDescription="@null"
                 android:importantForAccessibility="no"
-                android:src="@drawable/foto_grupo" />
+                android:src="@drawable/foto_vazia" />
 
             <ImageView
+                android:id="@+id/btnHeaderProfileEdit"
                 android:layout_width="13dp"
                 android:layout_height="13dp"
                 android:layout_gravity="bottom|end"
                 android:background="@drawable/bg_circular_editar"
-                android:contentDescription="@null"
+                android:clickable="true"
+                android:contentDescription="Ir para perfil"
+                android:focusable="true"
                 android:importantForAccessibility="no"
                 android:padding="3dp"
                 android:src="@drawable/editar_simbolo" />

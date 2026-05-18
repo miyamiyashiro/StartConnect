@@ -127,7 +127,16 @@ class NotificacoesActivity : AppCompatActivity() {
             startActivity(Intent(this, ChatListActivity::class.java).putExtra("usuarioId", usuarioId).putExtra("usuarioTipo", usuarioTipo))
         }
         findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
-            startActivity(Intent(this, FavoritosActivity::class.java).putExtra("usuarioId", usuarioId).putExtra("usuarioTipo", usuarioTipo))
+            val destination = if (usuarioTipo.equals("Investidor", ignoreCase = true)) {
+                FavoritosActivity::class.java
+            } else {
+                ConexoesActivity::class.java
+            }
+            startActivity(
+                Intent(this, destination)
+                    .putExtra("usuarioId", usuarioId)
+                    .putExtra("usuarioTipo", usuarioTipo)
+            )
         }
         findViewById<View>(R.id.navNotificacoesContainer).setOnClickListener {
             selectItem(it, findViewById(R.id.navNotificacoesIcon))

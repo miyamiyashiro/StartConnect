@@ -74,6 +74,10 @@ class AddStartupActivity : AppCompatActivity() {
         btnAbrirAddStartup.setOnClickListener { openCreateStartup(null) }
         btnAbrirAddStartupFooter.setOnClickListener { openCreateStartup(null) }
 
+        findViewById<View>(R.id.btnHeaderProfileEdit).setOnClickListener {
+            openPerfil()
+        }
+
         loadProfilePhoto()
         loadProfileInfo()
         setupBottomNavigation()
@@ -215,10 +219,7 @@ class AddStartupActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.navContaContainer).setOnClickListener {
-            val intent = Intent(this, PerfilActivity::class.java)
-            intent.putExtra("usuarioId", usuarioId)
-            intent.putExtra("usuarioTipo", usuarioTipo)
-            startActivity(intent)
+            openPerfil()
         }
 
         findViewById<View>(R.id.navChatContainer).setOnClickListener {
@@ -229,10 +230,7 @@ class AddStartupActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
-            val intent = Intent(this, FavoritosActivity::class.java)
-            intent.putExtra("usuarioId", usuarioId)
-            intent.putExtra("usuarioTipo", usuarioTipo)
-            startActivity(intent)
+            openHeartDestination()
         }
 
         findViewById<View>(R.id.navNotificacoesContainer).setOnClickListener {
@@ -247,6 +245,26 @@ class AddStartupActivity : AppCompatActivity() {
         }
 
         selectItem(findViewById(R.id.navHomeContainer), findViewById(R.id.navHomeIcon))
+    }
+
+    private fun openPerfil() {
+        val intent = Intent(this, PerfilActivity::class.java)
+        intent.putExtra("usuarioId", usuarioId)
+        intent.putExtra("usuarioTipo", usuarioTipo)
+        startActivity(intent)
+    }
+
+    private fun openHeartDestination() {
+        val destination = if (usuarioTipo.equals("Investidor", ignoreCase = true)) {
+            FavoritosActivity::class.java
+        } else {
+            ConexoesActivity::class.java
+        }
+
+        val intent = Intent(this, destination)
+        intent.putExtra("usuarioId", usuarioId)
+        intent.putExtra("usuarioTipo", usuarioTipo)
+        startActivity(intent)
     }
 
     private fun showLogoutDialog() {

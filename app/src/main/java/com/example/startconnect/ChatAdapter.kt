@@ -11,6 +11,20 @@ class ChatAdapter(
     private val onItemClick: (ChatResponse) -> Unit
 ) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
+    private var chatsFiltrados: List<ChatResponse> = chats.toList()
+
+    fun filter(query: String) {
+        chatsFiltrados = if (query.isBlank()) {
+            chats.toList()
+        } else {
+            chats.filter {
+                it.startupNome.contains(query, ignoreCase = true) ||
+                        it.ultimaMensagem.contains(query, ignoreCase = true)
+            }
+        }
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_chat, parent, false)
@@ -18,12 +32,12 @@ class ChatAdapter(
     }
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-        val chat = chats[position]
+        val chat = chatsFiltrados[position]
         holder.bind(chat)
         holder.itemView.setOnClickListener { onItemClick(chat) }
     }
 
-    override fun getItemCount(): Int = chats.size
+    override fun getItemCount(): Int = chatsFiltrados.size
 
     class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nome: TextView = itemView.findViewById(R.id.txtChatNome)

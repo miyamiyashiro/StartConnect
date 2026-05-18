@@ -70,8 +70,9 @@ class ChatListActivity : AppCompatActivity() {
                     } else {
                         findViewById<TextView>(R.id.txtChatsVazio).visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
-                        recyclerView.adapter = ChatAdapter(chats) { chat ->
-                            val intent = Intent(this@ChatListActivity, ChatConversaActivity::class.java)
+                        val adapter = ChatAdapter(chats) { chat ->
+                            val intent =
+                                Intent(this@ChatListActivity, ChatConversaActivity::class.java)
                             intent.putExtra("usuarioId", usuarioId)
                             intent.putExtra("usuarioTipo", usuarioTipo)
                             intent.putExtra("startupId", chat.startupId)
@@ -79,6 +80,30 @@ class ChatListActivity : AppCompatActivity() {
                             intent.putExtra("outroUsuarioId", chat.outroUsuarioId)
                             startActivity(intent)
                         }
+                        recyclerView.adapter = adapter
+
+                        // Conecta a barra de pesquisa
+                        findViewById<android.widget.EditText>(R.id.searchEditText)
+                            .addTextChangedListener(object : android.text.TextWatcher {
+                                override fun beforeTextChanged(
+                                    s: CharSequence?,
+                                    start: Int,
+                                    count: Int,
+                                    after: Int
+                                ) {
+                                }
+
+                                override fun onTextChanged(
+                                    s: CharSequence?,
+                                    start: Int,
+                                    before: Int,
+                                    count: Int
+                                ) {
+                                    adapter.filter(s.toString())
+                                }
+
+                                override fun afterTextChanged(s: android.text.Editable?) {}
+                            })
                     }
                 }
             }
@@ -121,7 +146,16 @@ class ChatListActivity : AppCompatActivity() {
             selectItem(it, findViewById(R.id.navChatIcon))
         }
         findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
-            startActivity(Intent(this, FavoritosActivity::class.java).putExtra("usuarioId", usuarioId).putExtra("usuarioTipo", usuarioTipo))
+            val destination = if (usuarioTipo.equals("Investidor", ignoreCase = true)) {
+                FavoritosActivity::class.java
+            } else {
+                ConexoesActivity::class.java
+            }
+            startActivity(
+                Intent(this, destination)
+                    .putExtra("usuarioId", usuarioId)
+                    .putExtra("usuarioTipo", usuarioTipo)
+            )
         }
         findViewById<View>(R.id.navNotificacoesContainer).setOnClickListener {
             startActivity(Intent(this, NotificacoesActivity::class.java).putExtra("usuarioId", usuarioId).putExtra("usuarioTipo", usuarioTipo))

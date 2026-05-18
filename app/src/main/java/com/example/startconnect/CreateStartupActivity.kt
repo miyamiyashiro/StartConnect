@@ -1,7 +1,12 @@
 package com.example.startconnect
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
+import android.view.Window
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -44,20 +49,28 @@ class CreateStartupActivity : AppCompatActivity() {
         val etAreaStartup = findViewById<EditText>(R.id.etAreaStartup)
         val etTagsStartup = findViewById<EditText>(R.id.etTagsStartup)
         val btnSalvarStartup = findViewById<MaterialButton>(R.id.btnSalvarStartup)
+        val btnApagarStartup = findViewById<MaterialButton>(R.id.btnApagarStartup)
         val txtCreateStartupTitle = findViewById<TextView>(R.id.txtCreateStartupTitle)
         val txtCreateStartupHandle = findViewById<TextView>(R.id.txtCreateStartupHandle)
 
         loadProfileInfo(txtCreateStartupHandle)
 
         if (isEditMode) {
-            txtCreateStartupTitle.text = "Editar\nStartup"
-            btnSalvarStartup.text = "Salvar Alterações"
+            txtCreateStartupTitle.text = "Editar Startup"
+            txtCreateStartupTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)
+            btnSalvarStartup.text = "Salvar Alteracoes"
+            btnApagarStartup.visibility = View.VISIBLE
+
             etNomeStartup.setText(intent.getStringExtra("startupNome").orEmpty())
             etDescricaoStartup.setText(intent.getStringExtra("startupSubtitulo").orEmpty())
             etAreaStartup.setText(intent.getStringExtra("startupSegmento").orEmpty())
 
             val tags = intent.getStringArrayListExtra("startupTags").orEmpty()
             etTagsStartup.setText(tags.joinToString(", "))
+        }
+
+        btnApagarStartup.setOnClickListener {
+            showDeleteStartupDialog()
         }
 
         btnSalvarStartup.setOnClickListener {
@@ -157,11 +170,81 @@ class CreateStartupActivity : AppCompatActivity() {
         setupBottomNavigation()
     }
 
+    private fun showDeleteStartupDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_apagar_startup)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.findViewById<MaterialButton>(R.id.btnConfirmarApagarStartup).setOnClickListener {
+            deleteStartup(dialog)
+        }
+
+        dialog.findViewById<MaterialButton>(R.id.btnCancelarApagarStartup).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun deleteStartup(dialog: Dialog) {
+        if (usuarioId == -1 || startupId == -1) {
+            Toast.makeText(this, "Startup inválida para apagar", Toast.LENGTH_LONG).show()
+            dialog.dismiss()
+            return
+        }
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://192.168.0.166/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val apiService = retrofit.create(ApiService::class.java)
+        apiService.deleteStartup(startupId, usuarioId).enqueue(object : Callback<StartupRegisterResponse> {
+            override fun onResponse(
+                call: Call<StartupRegisterResponse>,
+                response: Response<StartupRegisterResponse>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    val deleteResponse = response.body()!!
+                    Toast.makeText(
+                        this@CreateStartupActivity,
+                        deleteResponse.message,
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    if (deleteResponse.success) {
+                        dialog.dismiss()
+                        finish()
+                    }
+                } else {
+                    Toast.makeText(
+                        this@CreateStartupActivity,
+                        "Erro ao apagar startup",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<StartupRegisterResponse>, t: Throwable) {
+                Toast.makeText(
+                    this@CreateStartupActivity,
+                    "Falha na conexão: ${t.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
     private fun loadProfileInfo(handleTextView: TextView) {
         if (usuarioId == -1) return
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

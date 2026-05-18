@@ -4,86 +4,91 @@
     android:id="@+id/notificacoesRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_home_gradient"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="#4B2C7F"
+    android:orientation="vertical">
 
-    <!-- Header teal com foto e @tipo -->
+    <!-- Header: foto + @ -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingStart="8dp">
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="48dp"
+        android:paddingBottom="12dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:src="@drawable/foto_grupo"
-            app:shapeAppearanceOverlay="@style/CircleImage" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/foto_vazia"
+            app:shapeAppearanceOverlay="@style/CircleImage"
+            app:strokeColor="#6CB5B5"
+            app:strokeWidth="2dp" />
 
         <TextView
             android:id="@+id/txtNotifTipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="\@Investidor"
+            android:text="@Investidor"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
-    <!-- Card teal principal -->
+    <!-- Título solto igual ao chat -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notificações"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Contador -->
+    <TextView
+        android:id="@+id/txtNotifContador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="12dp"
+        android:text="Você têm 0 novas notificações"
+        android:textColor="#CCFFFFFF"
+        android:textSize="14sp" />
+
+    <!-- Card roxo com lista, igual ao chat -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
         android:layout_weight="1"
-        android:background="@drawable/card_verde"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/card_roxo_shape"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="16dp">
 
-        <!-- Titulo Notificacoes -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:text="Notificações"
-            android:textColor="#1A1F2B"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <!-- Contador -->
-        <TextView
-            android:id="@+id/txtNotifContador"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Você têm 0 novas\nnotificações"
-            android:textColor="#1A1F2B"
-            android:textSize="14sp" />
-
-        <!-- Lista de notificacoes -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/notificacoesRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipToPadding="false"
-            android:scrollbars="none" />
-
-        <!-- Estado vazio -->
         <TextView
             android:id="@+id/txtNotifVazio"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:text="Nenhuma notificação ainda."
-            android:textColor="#1A1F2B"
+            android:textColor="#CCFFFFFF"
             android:textSize="16sp"
             android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/notificacoesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:scrollbars="none" />
 
     </LinearLayout>
 
@@ -120,6 +125,7 @@
         <FrameLayout android:id="@+id/navSairContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
             <ImageView android:id="@+id/navSairIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/logoout_menu" app:tint="@color/bottom_nav_icon_tint" />
         </FrameLayout>
+
     </LinearLayout>
 
 </LinearLayout>
