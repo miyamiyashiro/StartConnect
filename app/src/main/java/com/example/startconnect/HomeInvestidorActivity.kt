@@ -111,7 +111,7 @@ class HomeInvestidorActivity : AppCompatActivity() {
 
     private fun fetchStartups() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.0.166/")
+            .baseUrl("http://192.168.1.100/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

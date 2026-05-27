@@ -99,7 +99,7 @@ class CreateStartupActivity : AppCompatActivity() {
             val tag4 = tagsSeparadas.getOrElse(3) { "" }
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.0.166/")
+                .baseUrl("http://192.168.1.100/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -199,7 +199,7 @@ class CreateStartupActivity : AppCompatActivity() {
         }
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.0.166/")
+            .baseUrl("http://192.168.1.100/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -244,7 +244,7 @@ class CreateStartupActivity : AppCompatActivity() {
         if (usuarioId == -1) return
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.0.166/")
+            .baseUrl("http://192.168.1.100/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
