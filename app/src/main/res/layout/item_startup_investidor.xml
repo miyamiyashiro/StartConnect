@@ -95,12 +95,12 @@
 
     <ImageView
         android:id="@+id/startupEditIcon"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
         android:layout_marginStart="10dp"
-        android:background="@drawable/bg_circular_editar"
-        android:contentDescription="Editar startup"
-        android:padding="3dp"
+        android:background="@drawable/bg_small_action_white"
+        android:contentDescription="Acao da startup"
+        android:padding="4dp"
         android:src="@drawable/editar_simbolo"
         android:visibility="gone" />
 

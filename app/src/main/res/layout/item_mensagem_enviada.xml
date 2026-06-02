@@ -3,20 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="end"
-    android:paddingStart="60dp"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp">
+    android:paddingStart="64dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
 
     <TextView
         android:id="@+id/txtMensagem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_verde"
-        android:paddingStart="14dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="14dp"
-        android:paddingBottom="10dp"
+        android:background="@drawable/chat_bubble_sent"
+        android:paddingStart="15dp"
+        android:paddingTop="11dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="11dp"
         android:text="Mensagem"
-        android:textColor="#FFFFFF"
+        android:textColor="#244444"
         android:textSize="14sp" />
 </LinearLayout>

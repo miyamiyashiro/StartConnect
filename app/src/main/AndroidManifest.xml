@@ -15,19 +15,7 @@
         android:theme="@style/Theme.StartConnect"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ConexaoResponse"
-            android:exported="false" />
-        <activity
-            android:name=".ConexaoAdapter"
-            android:exported="false" />
-        <activity
             android:name=".ConexoesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".StartupRegisterResponse"
-            android:exported="false" />
-        <activity
-            android:name=".StartupResponse"
             android:exported="false" />
         <activity
             android:name=".IntroActivity"

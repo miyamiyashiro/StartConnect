@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:background="@drawable/bg_home_gradient">
 
-    <!-- Header verde com foto e @ -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="94dp"
@@ -66,13 +65,12 @@
                 android:id="@+id/txtInvestidorTipo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@Investidor"
+                android:text="@usuario"
                 android:textColor="#E7FFFF"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Card roxo com busca e lista -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -87,7 +85,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginBottom="14dp"
             android:background="@drawable/investor_search_background"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -113,6 +111,32 @@
                 android:textColorHint="#244444" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/investor_search_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@null"
+                android:src="@android:drawable/ic_menu_search" />
+
+            <Spinner
+                android:id="@+id/spinnerTagFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:paddingStart="10dp"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/startupsRecyclerView"
             android:layout_width="match_parent"
@@ -126,7 +150,6 @@
 
     </LinearLayout>
 
-    <!-- Bottom Navigation -->
     <LinearLayout
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"

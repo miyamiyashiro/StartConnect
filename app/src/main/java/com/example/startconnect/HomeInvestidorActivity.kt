@@ -9,8 +9,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.Window
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -28,9 +32,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 class HomeInvestidorActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var spinnerTagFilter: Spinner
     private var usuarioId: Int = -1
     private var usuarioTipo: String = "Investidor"
     private var allStartups: List<Startup> = emptyList()
+    private var currentSearchQuery: String = ""
+    private var currentTagFilter: String = "Todas as tags"
+
+    private val tagFilterOptions = listOf(
+        "Todas as tags",
+        "Saude",
+        "Alimentacao",
+        "Entretenimento",
+        "Tech",
+        "Meio-Ambiente"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,11 +62,15 @@ class HomeInvestidorActivity : AppCompatActivity() {
         usuarioId = intent.getIntExtra("usuarioId", -1)
         usuarioTipo = intent.getStringExtra("usuarioTipo") ?: "Investidor"
 
+        findViewById<TextView>(R.id.txtInvestidorTipo).text = "@usuario"
+
         setupRecyclerView()
         setupSearch()
+        setupTagFilter()
         fetchStartups()
         setupBottomNavigation()
         loadProfilePhoto()
+        loadProfileInfo()
 
         findViewById<View>(R.id.btnHeaderProfileEdit).setOnClickListener {
             openPerfil()
@@ -66,6 +86,29 @@ class HomeInvestidorActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadProfileInfo() {
+        if (usuarioId == -1) return
+
+        val apiService = getRetrofit().create(ApiService::class.java)
+        apiService.getPerfil(usuarioId).enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    findViewById<TextView>(R.id.txtInvestidorTipo).text =
+                        "@${response.body()!!.usuarioNome}"
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) = Unit
+        })
+    }
+
+    private fun getRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("http://192.168.1.103/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
     private fun setupRecyclerView() {
         recyclerView = findViewById(R.id.startupsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -74,26 +117,49 @@ class HomeInvestidorActivity : AppCompatActivity() {
     private fun setupSearch() {
         val searchEditText = findViewById<EditText>(R.id.searchEditText)
         searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
 
             override fun afterTextChanged(s: Editable?) {
-                val query = s.toString().trim().lowercase()
-
-                if (query.isEmpty()) {
-                    showStartups(allStartups)
-                } else {
-                    val filtered = allStartups.filter { startup ->
-                        startup.nome.lowercase().contains(query) ||
-                                startup.segmento.lowercase().contains(query) ||
-                                startup.subtitulo.lowercase().contains(query) ||
-                                startup.tags.any { it.lowercase().contains(query) }
-                    }
-                    showStartups(filtered)
-                }
+                currentSearchQuery = s.toString().trim().lowercase()
+                applyFilters()
             }
         })
+    }
+
+    private fun setupTagFilter() {
+        spinnerTagFilter = findViewById(R.id.spinnerTagFilter)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, tagFilterOptions)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerTagFilter.adapter = adapter
+        spinnerTagFilter.setSelection(0, false)
+
+        spinnerTagFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                currentTagFilter = tagFilterOptions[position]
+                applyFilters()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
+    }
+
+    private fun applyFilters() {
+        val filtered = allStartups.filter { startup ->
+            val matchesSearch = currentSearchQuery.isEmpty() ||
+                startup.nome.lowercase().contains(currentSearchQuery) ||
+                startup.segmento.lowercase().contains(currentSearchQuery) ||
+                startup.subtitulo.lowercase().contains(currentSearchQuery) ||
+                startup.tags.any { it.lowercase().contains(currentSearchQuery) }
+
+            val matchesTag = currentTagFilter == "Todas as tags" ||
+                startup.tags.any { it.equals(currentTagFilter, ignoreCase = true) }
+
+            matchesSearch && matchesTag
+        }
+
+        showStartups(filtered)
     }
 
     private fun showStartups(startups: List<Startup>) {
@@ -111,7 +177,7 @@ class HomeInvestidorActivity : AppCompatActivity() {
 
     private fun fetchStartups() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.100/")
+            .baseUrl("http://192.168.1.103/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -138,7 +204,7 @@ class HomeInvestidorActivity : AppCompatActivity() {
                         )
                     }
 
-                    showStartups(allStartups)
+                    applyFilters()
                 } else {
                     Toast.makeText(
                         this@HomeInvestidorActivity,
@@ -151,7 +217,7 @@ class HomeInvestidorActivity : AppCompatActivity() {
             override fun onFailure(call: Call<List<StartupResponse>>, t: Throwable) {
                 Toast.makeText(
                     this@HomeInvestidorActivity,
-                    "Falha na conexão: ${t.message}",
+                    "Falha na conexao: ${t.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }

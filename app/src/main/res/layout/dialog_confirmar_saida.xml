@@ -1,49 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/card_verde"
+    android:background="@drawable/card_roxo_shape"
     android:orientation="vertical"
-    android:padding="24dp">
-
-    <ImageView
-        android:id="@+id/btnFecharApagarConta"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_gravity="end"
-        android:contentDescription="Fechar"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        app:tint="#FFFFFF" />
-
-    <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="18dp"
-        android:contentDescription="@null"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        app:tint="#E14D5A" />
+    android:padding="30dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="28dp"
         android:gravity="center"
-        android:text="Apagar conta"
+        android:text="Há alterações não salvas.\nDeseja mesmo sair?"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:gravity="center"
-        android:text="Tem certeza que deseja apagar a conta?"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,19 +24,19 @@
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnConfirmarApagar"
+            android:id="@+id/btnConfirmarSaida"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
-            android:text="Sim"
+            android:text="Sair"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
-            app:backgroundTint="#E14D5A"
+            app:backgroundTint="#45A09E"
             app:cornerRadius="16dp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCancelarApagar"
+            android:id="@+id/btnCancelarSaida"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="Voltar"

@@ -5,17 +5,35 @@
     android:layout_height="wrap_content"
     android:background="@drawable/card_roxo_shape"
     android:orientation="vertical"
-    android:padding="30dp">
+    android:padding="28dp">
+
+    <ImageView
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="18dp"
+        android:contentDescription="@null"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:tint="#E14D5A" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="14dp"
         android:gravity="center"
-        android:text="Tem certeza que deseja\napagar esta startup?"
+        android:text="Apagar startup"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="Tem certeza que deseja apagar esta startup?"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +50,7 @@
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
-            app:backgroundTint="#45A09E"
+            app:backgroundTint="#E14D5A"
             app:cornerRadius="16dp" />
 
         <com.google.android.material.button.MaterialButton

@@ -1,8 +1,12 @@
 package com.example.startconnect
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -12,6 +16,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,11 +43,11 @@ class ChatListActivity : AppCompatActivity() {
         usuarioId = intent.getIntExtra("usuarioId", -1)
         usuarioTipo = intent.getStringExtra("usuarioTipo") ?: ""
 
-        findViewById<TextView>(R.id.txtChatTipo).text = "@${usuarioTipo.lowercase()}"
-
         recyclerView = findViewById(R.id.chatsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        loadProfilePhoto()
+        loadProfileInfo()
         setupBottomNavigation()
     }
 
@@ -53,9 +58,32 @@ class ChatListActivity : AppCompatActivity() {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.100/")
+            .baseUrl("http://192.168.1.103/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    private fun loadProfilePhoto() {
+        val bitmap = ProfilePhotoHelper.getPhotoBitmap(this, usuarioId)
+        if (bitmap != null) {
+            findViewById<ImageView>(R.id.imgHeaderProfile).setImageBitmap(bitmap)
+        }
+    }
+
+    private fun loadProfileInfo() {
+        if (usuarioId == -1) return
+
+        val apiService = getRetrofit().create(ApiService::class.java)
+        apiService.getPerfil(usuarioId).enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    findViewById<TextView>(R.id.txtChatTipo).text =
+                        "@${response.body()!!.usuarioNome}"
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) = Unit
+        })
     }
 
     private fun fetchChats() {
@@ -161,10 +189,35 @@ class ChatListActivity : AppCompatActivity() {
             startActivity(Intent(this, NotificacoesActivity::class.java).putExtra("usuarioId", usuarioId).putExtra("usuarioTipo", usuarioTipo))
         }
         findViewById<View>(R.id.navSairContainer).setOnClickListener {
-            startActivity(Intent(this, IntroActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
-            finish()
+            showLogoutDialog()
         }
 
         selectItem(findViewById(R.id.navChatContainer), findViewById(R.id.navChatIcon))
+    }
+
+    private fun showLogoutDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_logout)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.findViewById<MaterialButton>(R.id.btnConfirmarLogout).setOnClickListener {
+            dialog.dismiss()
+            startActivity(
+                Intent(this, IntroActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            )
+            finish()
+        }
+
+        dialog.findViewById<MaterialButton>(R.id.btnCancelarLogout).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

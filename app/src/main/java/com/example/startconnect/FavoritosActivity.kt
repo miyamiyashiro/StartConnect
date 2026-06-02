@@ -53,11 +53,19 @@ class FavoritosActivity : AppCompatActivity() {
             return
         }
 
-        findViewById<TextView>(R.id.txtFavTipo).text = "@${usuarioTipo.lowercase()}"
-
         recyclerView = findViewById(R.id.favoritosRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        findViewById<View>(R.id.btnHeaderProfileEdit).setOnClickListener {
+            startActivity(
+                Intent(this, PerfilActivity::class.java)
+                    .putExtra("usuarioId", usuarioId)
+                    .putExtra("usuarioTipo", usuarioTipo)
+            )
+        }
+
+        loadProfilePhoto()
+        loadProfileInfo()
         setupBottomNavigation()
     }
 
@@ -68,9 +76,31 @@ class FavoritosActivity : AppCompatActivity() {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.100/")
+            .baseUrl("http://192.168.1.103/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    private fun loadProfilePhoto() {
+        val bitmap = ProfilePhotoHelper.getPhotoBitmap(this, usuarioId)
+        if (bitmap != null) {
+            findViewById<ImageView>(R.id.imgHeaderProfile).setImageBitmap(bitmap)
+        }
+    }
+
+    private fun loadProfileInfo() {
+        if (usuarioId == -1) return
+
+        val apiService = getRetrofit().create(ApiService::class.java)
+        apiService.getPerfil(usuarioId).enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    findViewById<TextView>(R.id.txtFavTipo).text = "@${response.body()!!.usuarioNome}"
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) = Unit
+        })
     }
 
     private fun fetchFavoritos() {
@@ -105,6 +135,14 @@ class FavoritosActivity : AppCompatActivity() {
                         recyclerView.adapter = StartupAdapter(
                             startups = startups,
                             onItemClick = { startup ->
+                                val intent = Intent(this@FavoritosActivity, StartupDetalhesActivity::class.java)
+                                intent.putExtra("startupId", startup.startupId)
+                                intent.putExtra("usuarioId", usuarioId)
+                                intent.putExtra("usuarioTipo", usuarioTipo)
+                                startActivity(intent)
+                            },
+                            actionIconRes = android.R.drawable.ic_menu_close_clear_cancel,
+                            onActionClick = { startup ->
                                 showDesfavoritarDialog(startup)
                             }
                         )
@@ -253,6 +291,24 @@ class FavoritosActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.navSairContainer).setOnClickListener {
+            showLogoutDialog()
+        }
+
+        selectItem(findViewById(R.id.navFavoritosContainer), findViewById(R.id.navFavoritosIcon))
+    }
+
+    private fun showLogoutDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_logout)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.findViewById<MaterialButton>(R.id.btnConfirmarLogout).setOnClickListener {
+            dialog.dismiss()
             startActivity(
                 Intent(this, IntroActivity::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -260,7 +316,11 @@ class FavoritosActivity : AppCompatActivity() {
             finish()
         }
 
-        selectItem(findViewById(R.id.navFavoritosContainer), findViewById(R.id.navFavoritosIcon))
+        dialog.findViewById<MaterialButton>(R.id.btnCancelarLogout).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
 

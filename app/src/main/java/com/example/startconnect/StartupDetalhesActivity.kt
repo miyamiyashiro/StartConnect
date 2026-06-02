@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -56,7 +55,7 @@ class StartupDetalhesActivity : AppCompatActivity() {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.100/")
+            .baseUrl("http://192.168.1.103/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -73,6 +72,7 @@ class StartupDetalhesActivity : AppCompatActivity() {
 
                     findViewById<TextView>(R.id.txtStartupNome).text = startup.nome
                     findViewById<TextView>(R.id.txtStartupSegmento).text = startup.segmento
+                    findViewById<TextView>(R.id.chipTipoStartup).text = startup.segmento
                     findViewById<TextView>(R.id.txtStartupDescricao).text = startup.subtitulo
 
                     val tags = listOfNotNull(
@@ -81,18 +81,24 @@ class StartupDetalhesActivity : AppCompatActivity() {
                         startup.tag3?.takeIf { it.isNotBlank() },
                         startup.tag4?.takeIf { it.isNotBlank() }
                     )
+
                     val tagViews = listOf(
                         findViewById<TextView>(R.id.tagOne),
                         findViewById<TextView>(R.id.tagTwo),
                         findViewById<TextView>(R.id.tagThree),
                         findViewById<TextView>(R.id.tagFour)
                     )
-                    tags.forEachIndexed { i, tag ->
-                        if (i < tagViews.size) {
-                            tagViews[i].text = tag
-                            tagViews[i].visibility = View.VISIBLE
+
+                    tagViews.forEach { it.visibility = View.GONE }
+                    tags.forEachIndexed { index, tag ->
+                        if (index < tagViews.size) {
+                            tagViews[index].text = tag
+                            tagViews[index].visibility = View.VISIBLE
                         }
                     }
+
+                    findViewById<LinearLayout>(R.id.tagsContainer).visibility =
+                        if (tags.isEmpty()) View.GONE else View.VISIBLE
 
                     updateFavoritoUI()
                 }
@@ -226,5 +232,33 @@ class StartupDetalhesActivity : AppCompatActivity() {
             intent.putExtra("usuarioTipo", usuarioTipo)
             startActivity(intent)
         }
+        findViewById<View>(R.id.navSairContainer).setOnClickListener {
+            showLogoutDialog()
+        }
+    }
+
+    private fun showLogoutDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_logout)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.findViewById<MaterialButton>(R.id.btnConfirmarLogout).setOnClickListener {
+            dialog.dismiss()
+            val intent = Intent(this, IntroActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+
+        dialog.findViewById<MaterialButton>(R.id.btnCancelarLogout).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

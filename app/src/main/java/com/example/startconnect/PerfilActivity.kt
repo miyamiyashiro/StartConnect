@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +31,10 @@ class PerfilActivity : AppCompatActivity() {
     private var usuarioId: Int = -1
     private var usuarioTipo: String = ""
     private lateinit var profileImage: ShapeableImageView
+    private lateinit var etPerfilNome: EditText
+    private lateinit var etPerfilEmail: EditText
+    private var initialNome: String = ""
+    private var initialEmail: String = ""
 
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -55,15 +60,14 @@ class PerfilActivity : AppCompatActivity() {
         usuarioTipo = intent.getStringExtra("usuarioTipo") ?: ""
 
         profileImage = findViewById(R.id.imgPerfil)
+        etPerfilNome = findViewById(R.id.txtPerfilNome)
+        etPerfilEmail = findViewById(R.id.txtPerfilEmail)
 
         findViewById<View>(R.id.btnEditarFotoPerfil).setOnClickListener {
             pickImageLauncher.launch("image/*")
         }
 
         loadProfilePhoto()
-
-        val txtPerfilTipo = findViewById<TextView>(R.id.txtPerfilTipo)
-        txtPerfilTipo.text = "@${usuarioTipo.lowercase()}"
 
         fetchPerfil()
 
@@ -75,7 +79,19 @@ class PerfilActivity : AppCompatActivity() {
             showApagarContaDialog()
         }
 
+        findViewById<MaterialButton>(R.id.btnSalvarPerfil).setOnClickListener {
+            salvarPerfil()
+        }
+
         setupBottomNavigation()
+
+        onBackPressedDispatcher.addCallback(this) {
+            if (hasUnsavedChanges()) {
+                showUnsavedChangesDialog { finish() }
+            } else {
+                finish()
+            }
+        }
     }
 
     private fun loadProfilePhoto() {
@@ -89,7 +105,7 @@ class PerfilActivity : AppCompatActivity() {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.100/")
+            .baseUrl("http://192.168.1.103/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -100,8 +116,11 @@ class PerfilActivity : AppCompatActivity() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     val user = response.body()!!
-                    findViewById<TextView>(R.id.txtPerfilNome).text = user.usuarioNome
-                    findViewById<TextView>(R.id.txtPerfilEmail).text = user.usuarioEmail
+                    etPerfilNome.setText(user.usuarioNome)
+                    etPerfilEmail.setText(user.usuarioEmail)
+                    findViewById<TextView>(R.id.txtPerfilTipo).text = "@${user.usuarioNome}"
+                    initialNome = user.usuarioNome
+                    initialEmail = user.usuarioEmail
                 }
             }
 
@@ -179,6 +198,82 @@ class PerfilActivity : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+    private fun salvarPerfil() {
+        val nome = etPerfilNome.text.toString().trim()
+        val email = etPerfilEmail.text.toString().trim()
+
+        if (nome.isEmpty() || email.isEmpty()) {
+            Toast.makeText(this, "Preencha nome e email", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val apiService = getRetrofit().create(ApiService::class.java)
+        apiService.updatePerfil(usuarioId, nome, email).enqueue(object : Callback<RegisterResponse> {
+            override fun onResponse(
+                call: Call<RegisterResponse>,
+                response: Response<RegisterResponse>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    val resp = response.body()!!
+                    Toast.makeText(this@PerfilActivity, resp.message, Toast.LENGTH_LONG).show()
+                    if (resp.success) {
+                        initialNome = nome
+                        initialEmail = email
+                    }
+                } else {
+                    Toast.makeText(this@PerfilActivity, "Erro ao salvar perfil", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                Toast.makeText(this@PerfilActivity, "Falha na conexao: ${t.message}", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    private fun hasUnsavedChanges(): Boolean {
+        return etPerfilNome.text.toString().trim() != initialNome ||
+            etPerfilEmail.text.toString().trim() != initialEmail
+    }
+
+    private fun showUnsavedChangesDialog(onConfirmExit: () -> Unit) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_confirmar_saida)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.findViewById<MaterialButton>(R.id.btnConfirmarSaida).setOnClickListener {
+            dialog.dismiss()
+            onConfirmExit()
+        }
+
+        dialog.findViewById<MaterialButton>(R.id.btnCancelarSaida).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun navigateWithUnsavedCheck(destination: Class<*>) {
+        val action = {
+            val intent = Intent(this, destination)
+            intent.putExtra("usuarioId", usuarioId)
+            intent.putExtra("usuarioTipo", usuarioTipo)
+            startActivity(intent)
+            finish()
+        }
+
+        if (hasUnsavedChanges()) {
+            showUnsavedChangesDialog(action)
+        } else {
+            action()
+        }
     }
 
     private fun showApagarContaDialog() {
@@ -309,8 +404,13 @@ class PerfilActivity : AppCompatActivity() {
                     .start()
             }
         }
-        findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
-            openHeartDestination()
+        findViewById<View>(R.id.navHomeContainer).setOnClickListener {
+            val destination = if (usuarioTipo.equals("Investidor", ignoreCase = true)) {
+                HomeInvestidorActivity::class.java
+            } else {
+                AddStartupActivity::class.java
+            }
+            navigateWithUnsavedCheck(destination)
         }
 
         findViewById<View>(R.id.navContaContainer).setOnClickListener {
@@ -318,43 +418,30 @@ class PerfilActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.navChatContainer).setOnClickListener {
-            val intent = Intent(this, ChatListActivity::class.java)
-            intent.putExtra("usuarioId", usuarioId)
-            intent.putExtra("usuarioTipo", usuarioTipo)
-            startActivity(intent)
+            navigateWithUnsavedCheck(ChatListActivity::class.java)
         }
 
         findViewById<View>(R.id.navFavoritosContainer).setOnClickListener {
-            val intent = Intent(this, FavoritosActivity::class.java)
-            intent.putExtra("usuarioId", usuarioId)
-            intent.putExtra("usuarioTipo", usuarioTipo)
-            startActivity(intent)
+            if (usuarioTipo.equals("Investidor", ignoreCase = true)) {
+                navigateWithUnsavedCheck(FavoritosActivity::class.java)
+            } else {
+                navigateWithUnsavedCheck(ConexoesActivity::class.java)
+            }
         }
 
         findViewById<View>(R.id.navNotificacoesContainer).setOnClickListener {
-            val intent = Intent(this, NotificacoesActivity::class.java)
-            intent.putExtra("usuarioId", usuarioId)
-            intent.putExtra("usuarioTipo", usuarioTipo)
-            startActivity(intent)
+            navigateWithUnsavedCheck(NotificacoesActivity::class.java)
         }
 
         findViewById<View>(R.id.navSairContainer).setOnClickListener {
-            showLogoutDialog()
+            if (hasUnsavedChanges()) {
+                showUnsavedChangesDialog { showLogoutDialog() }
+            } else {
+                showLogoutDialog()
+            }
         }
 
         selectItem(findViewById(R.id.navContaContainer), findViewById(R.id.navContaIcon))
     }
 
-    private fun openHeartDestination() {
-        val destination = if (usuarioTipo.equals("Investidor", ignoreCase = true)) {
-            FavoritosActivity::class.java
-        } else {
-            ConexoesActivity::class.java
-        }
-
-        val intent = Intent(this, destination)
-        intent.putExtra("usuarioId", usuarioId)
-        intent.putExtra("usuarioTipo", usuarioTipo)
-        startActivity(intent)
-    }
 }

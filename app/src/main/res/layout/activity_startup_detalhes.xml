@@ -8,10 +8,11 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Header teal com seta voltar e nome da startup -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="94dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/investor_header_background"
@@ -58,16 +59,17 @@
                 android:id="@+id/txtStartupSegmento"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Segmento"
+                android:text="Tipo"
                 android:textColor="#E7FFFF"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Card roxo com conteudo -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
         android:layout_marginBottom="16dp"
         android:layout_weight="1"
         android:fillViewport="true"
@@ -80,25 +82,45 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- Descricao -->
             <TextView
-                android:id="@+id/txtStartupDescricao"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/edittext_border_branco"
-                android:minHeight="100dp"
-                android:padding="16dp"
-                android:text="Descrição da startup"
-                android:textColor="#335055"
-                android:textSize="15sp" />
+                android:layout_marginBottom="10dp"
+                android:text="Tipo de startup"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
-            <!-- Tags -->
+            <TextView
+                android:id="@+id/chipTipoStartup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:background="@drawable/tag_pill_background"
+                android:paddingStart="14dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="6dp"
+                android:text="Escalavel"
+                android:textColor="#355355"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="Tags"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
             <LinearLayout
+                android:id="@+id/tagsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:gravity="center"
+                android:layout_marginBottom="18dp"
+                android:gravity="start"
                 android:orientation="horizontal">
 
                 <TextView
@@ -111,7 +133,7 @@
                     android:paddingTop="4dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="4dp"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#355355"
                     android:textSize="11sp"
                     android:visibility="gone" />
 
@@ -125,7 +147,7 @@
                     android:paddingTop="4dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="4dp"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#355355"
                     android:textSize="11sp"
                     android:visibility="gone" />
 
@@ -139,7 +161,7 @@
                     android:paddingTop="4dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="4dp"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#355355"
                     android:textSize="11sp"
                     android:visibility="gone" />
 
@@ -152,12 +174,32 @@
                     android:paddingTop="4dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="4dp"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#355355"
                     android:textSize="11sp"
                     android:visibility="gone" />
             </LinearLayout>
 
-            <!-- Mensagem de favorito -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="Descrição"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtStartupDescricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:background="@drawable/edittext_border_branco"
+                android:minHeight="100dp"
+                android:padding="16dp"
+                android:text="Descrição da startup"
+                android:textColor="#335055"
+                android:textSize="15sp" />
+
             <LinearLayout
                 android:id="@+id/favoritoMessageLayout"
                 android:layout_width="match_parent"
@@ -174,13 +216,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Você favoritou\n${Startup}!\nMande uma\nmensagem para\nfazer negócio!"
+                    android:text="Voce favoritou esta startup"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Campo mensagem -->
             <LinearLayout
                 android:id="@+id/mensagemLayout"
                 android:layout_width="match_parent"
@@ -206,7 +247,6 @@
                     android:textColorHint="#7A8D92" />
             </LinearLayout>
 
-            <!-- Botoes -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -258,7 +298,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation -->
     <LinearLayout
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -273,23 +312,95 @@
         android:paddingEnd="10dp"
         android:weightSum="6">
 
-        <FrameLayout android:id="@+id/navHomeContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/navHomeIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/home_simbolo" app:tint="@color/bottom_nav_icon_tint" />
+        <FrameLayout
+            android:id="@+id/navHomeContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:id="@+id/navHomeIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/home_simbolo"
+                app:tint="@color/bottom_nav_icon_tint" />
         </FrameLayout>
-        <FrameLayout android:id="@+id/navContaContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/navContaIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/minhaconta_menu" app:tint="@color/bottom_nav_icon_tint" />
+        <FrameLayout
+            android:id="@+id/navContaContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:id="@+id/navContaIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/minhaconta_menu"
+                app:tint="@color/bottom_nav_icon_tint" />
         </FrameLayout>
-        <FrameLayout android:id="@+id/navChatContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/navChatIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/chat_menu" app:tint="@color/bottom_nav_icon_tint" />
+        <FrameLayout
+            android:id="@+id/navChatContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:id="@+id/navChatIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/chat_menu"
+                app:tint="@color/bottom_nav_icon_tint" />
         </FrameLayout>
-        <FrameLayout android:id="@+id/navFavoritosContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/navFavoritosIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/favoritos_menu" app:tint="@color/bottom_nav_icon_tint" />
+        <FrameLayout
+            android:id="@+id/navFavoritosContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:id="@+id/navFavoritosIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/favoritos_menu"
+                app:tint="@color/bottom_nav_icon_tint" />
         </FrameLayout>
-        <FrameLayout android:id="@+id/navNotificacoesContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/navNotificacoesIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/notificacao_menu" app:tint="@color/bottom_nav_icon_tint" />
+        <FrameLayout
+            android:id="@+id/navNotificacoesContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:id="@+id/navNotificacoesIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/notificacao_menu"
+                app:tint="@color/bottom_nav_icon_tint" />
         </FrameLayout>
-        <FrameLayout android:id="@+id/navSairContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/navSairIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/logoout_menu" app:tint="@color/bottom_nav_icon_tint" />
+        <FrameLayout
+            android:id="@+id/navSairContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:id="@+id/navSairIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logoout_menu"
+                app:tint="@color/bottom_nav_icon_tint" />
         </FrameLayout>
     </LinearLayout>
 

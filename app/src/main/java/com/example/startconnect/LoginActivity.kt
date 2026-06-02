@@ -60,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.1.100/")
+                .baseUrl("http://192.168.1.103/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -249,5 +249,13 @@ interface ApiService {
         @Field("tag3") tag3: String,
         @Field("tag4") tag4: String
     ): Call<StartupRegisterResponse>
+
+    @FormUrlEncoded
+    @POST("/meu_projeto_pi/atualizar_perfil.php")
+    fun updatePerfil(
+        @Field("usuario_id") usuarioId: Int,
+        @Field("nome") nome: String,
+        @Field("email") email: String
+    ): Call<RegisterResponse>
 
 }

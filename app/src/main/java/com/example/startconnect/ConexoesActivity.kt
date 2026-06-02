@@ -56,7 +56,6 @@ class ConexoesActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.conexoesRecyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        findViewById<TextView>(R.id.txtConexoesTipo).text = "@empreendedor"
         findViewById<View>(R.id.btnHeaderProfileEdit).setOnClickListener {
             openPerfil()
         }
@@ -73,7 +72,7 @@ class ConexoesActivity : AppCompatActivity() {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.100/")
+            .baseUrl("http://192.168.1.103/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -98,7 +97,7 @@ class ConexoesActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                findViewById<TextView>(R.id.txtConexoesTipo).text = "@empreendedor"
+                findViewById<TextView>(R.id.txtConexoesTipo).text = "@usuario"
             }
         })
     }

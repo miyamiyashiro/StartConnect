@@ -94,7 +94,7 @@ class AddStartupActivity : AppCompatActivity() {
         if (usuarioId == -1) return
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.100/")
+            .baseUrl("http://192.168.1.103/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -108,7 +108,7 @@ class AddStartupActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                txtHeaderHandle.text = "@Empreendedor"
+                txtHeaderHandle.text = "@usuario"
             }
         })
     }
@@ -125,7 +125,7 @@ class AddStartupActivity : AppCompatActivity() {
         }
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.100/")
+            .baseUrl("http://192.168.1.103/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
