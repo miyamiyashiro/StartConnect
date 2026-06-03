@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.app.Dialog
 import android.content.Intent
@@ -58,7 +58,7 @@ class ChatListActivity : AppCompatActivity() {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -106,6 +106,7 @@ class ChatListActivity : AppCompatActivity() {
                             intent.putExtra("startupId", chat.startupId)
                             intent.putExtra("startupNome", chat.startupNome)
                             intent.putExtra("outroUsuarioId", chat.outroUsuarioId)
+                            intent.putExtra("outroUsuarioNome", chat.outroUsuarioNome)
                             startActivity(intent)
                         }
                         recyclerView.adapter = adapter

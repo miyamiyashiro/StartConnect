@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/investorHomeRoot"
@@ -59,7 +59,7 @@
                 android:text="Home"
                 android:textColor="#FFFFFF"
                 android:textSize="26sp"
-                android:textStyle="bold" />
+                android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/txtInvestidorTipo"
@@ -176,7 +176,7 @@
         <FrameLayout android:id="@+id/navFavoritosContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true" android:contentDescription="Favoritos">
             <ImageView android:id="@+id/navFavoritosIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/favoritos_menu" app:tint="@color/bottom_nav_icon_tint" />
         </FrameLayout>
-        <FrameLayout android:id="@+id/navNotificacoesContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true" android:contentDescription="Notificacoes">
+        <FrameLayout android:id="@+id/navNotificacoesContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true" android:contentDescription="Notificações">
             <ImageView android:id="@+id/navNotificacoesIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/notificacao_menu" app:tint="@color/bottom_nav_icon_tint" />
         </FrameLayout>
         <FrameLayout android:id="@+id/navSairContainer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:clickable="true" android:focusable="true" android:contentDescription="Sair">

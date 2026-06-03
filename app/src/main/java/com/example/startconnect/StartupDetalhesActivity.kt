@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.app.Dialog
 import android.content.Intent
@@ -55,7 +55,7 @@ class StartupDetalhesActivity : AppCompatActivity() {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

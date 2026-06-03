@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_home"
@@ -19,7 +19,7 @@
     <item
         android:id="@+id/nav_notificacoes"
         android:icon="@drawable/notificacao_menu"
-        android:title="Notificacoes" />
+        android:title="Notificações" />
     <item
         android:id="@+id/nav_sair"
         android:icon="@drawable/logoout_menu"

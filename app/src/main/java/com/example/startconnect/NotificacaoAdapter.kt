@@ -1,9 +1,10 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.google.android.material.imageview.ShapeableImageView
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -33,11 +34,18 @@ class NotificacaoAdapter(
         private val nome: TextView = itemView.findViewById(R.id.txtNotifNome)
         private val mensagem: TextView = itemView.findViewById(R.id.txtNotifMensagem)
         private val data: TextView = itemView.findViewById(R.id.txtNotifData)
+        private val foto: ShapeableImageView = itemView.findViewById(R.id.imgNotifProfile)
 
         fun bind(notif: NotificacaoResponse) {
             nome.text = notif.startupNome
             mensagem.text = notif.texto
             data.text = formatarData(notif.dataEnvio)
+            val bitmap = ProfilePhotoHelper.getPhotoBitmap(itemView.context, notif.remetenteId)
+            if (bitmap != null) {
+                foto.setImageBitmap(bitmap)
+            } else {
+                foto.setImageResource(R.drawable.foto_vazia)
+            }
         }
 
         private fun formatarData(dataStr: String): String {

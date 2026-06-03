@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.content.Intent
 import android.graphics.Color
@@ -60,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.1.103/")
+                .baseUrl("http://192.168.0.166/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -92,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
                         } else {
                             Toast.makeText(
                                 this@LoginActivity,
-                                "Usuario ou senha invalidos",
+                                "Usuário ou senha inválidos",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -108,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<List<LoginResponse>>, t: Throwable) {
                     Toast.makeText(
                         this@LoginActivity,
-                        "Falha na conexao: ${t.message}",
+                        "Falha na conexão: ${t.message}",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -204,6 +204,20 @@ interface ApiService {
     ): Call<List<ConexaoResponse>>
 
 
+    @FormUrlEncoded
+    @POST("/meu_projeto_pi/desfazer_conexao.php")
+    fun desfazerConexao(
+        @Field("usuario_id") usuarioId: Int,
+        @Field("conectado_id") conectadoId: Int
+    ): Call<RegisterResponse>
+
+    @FormUrlEncoded
+    @POST("/meu_projeto_pi/conexa_chat.php")
+    fun validarConexaoChat(
+        @Field("usuario_id") usuarioId: Int,
+        @Field("outro_usuario_id") outroUsuarioId: Int,
+        @Field("startup_id") startupId: Int
+    ): Call<RegisterResponse>
     @GET("/meu_projeto_pi/listar_chats.php")
     fun getChats(
         @Query("usuario_id") usuarioId: Int
@@ -259,3 +273,6 @@ interface ApiService {
     ): Call<RegisterResponse>
 
 }
+
+
+

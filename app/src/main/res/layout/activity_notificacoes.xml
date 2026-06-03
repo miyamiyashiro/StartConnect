@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/notificacoesRoot"
@@ -19,8 +19,10 @@
         android:paddingBottom="12dp">
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgHeaderProfile"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/foto_vazia"
             app:shapeAppearanceOverlay="@style/CircleImage"
             app:strokeColor="#6CB5B5"
@@ -34,7 +36,7 @@
             android:text="@usuario"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold|italic" />
 
     </LinearLayout>
 
@@ -45,7 +47,7 @@
         android:text="Notificações"
         android:textColor="#FFFFFF"
         android:textSize="28sp"
-        android:textStyle="bold"
+        android:textStyle="bold|italic"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
         android:layout_marginBottom="16dp" />

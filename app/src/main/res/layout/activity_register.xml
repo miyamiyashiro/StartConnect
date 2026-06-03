@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/registerRoot"
     android:layout_width="match_parent"
@@ -7,10 +7,10 @@
 
     <ImageView
         android:id="@+id/registerLogo"
-        android:layout_width="210dp"
-        android:layout_height="210dp"
+        android:layout_width="176dp"
+        android:layout_height="176dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="22dp"
         android:contentDescription="@null"
         android:importantForAccessibility="no"
         android:src="@drawable/logo_sc_branco" />
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/registerLogo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-24dp"
+        android:layout_marginTop="-8dp"
         android:gravity="center"
         android:text="TUDO COMEÇA COM&#10;UMA CONEXÃO"
         android:textColor="#F1EAF4"
@@ -212,8 +212,7 @@
             android:text="CADASTRAR"
             android:textAllCaps="false"
             android:textColor="#5A7073"
-            android:textSize="17sp"/>
-
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/goToLoginText"
@@ -229,6 +228,3 @@
     </LinearLayout>
 
 </RelativeLayout>
-
-
-

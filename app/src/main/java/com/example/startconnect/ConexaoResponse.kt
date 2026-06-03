@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 data class ConexaoResponse(
     val usuarioId: Int,

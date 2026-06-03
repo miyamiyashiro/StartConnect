@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/perfilRoot"
@@ -55,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="Perfil"
                 android:textColor="#FFFFFF"
+                android:textStyle="bold|italic"
                 android:textSize="28sp" />
 
             <TextView
@@ -345,7 +346,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="true"
-            android:contentDescription="Notificacoes"
+            android:contentDescription="Notificações"
             android:focusable="true">
 
             <ImageView

@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -18,10 +18,10 @@ object ProfilePhotoHelper {
             val bitmap = BitmapFactory.decodeStream(inputStream)
             inputStream.close()
 
-            // Redimensionar pra nao ficar pesado
-            val scaled = Bitmap.createScaledBitmap(bitmap, 200, 200, true)
+            val cropped = cropToSquare(bitmap)
+            val scaled = Bitmap.createScaledBitmap(cropped, 600, 600, true)
             val baos = ByteArrayOutputStream()
-            scaled.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+            scaled.compress(Bitmap.CompressFormat.JPEG, 92, baos)
             val base64 = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT)
 
             val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -29,6 +29,13 @@ object ProfilePhotoHelper {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun cropToSquare(bitmap: Bitmap): Bitmap {
+        val size = minOf(bitmap.width, bitmap.height)
+        val xOffset = (bitmap.width - size) / 2
+        val yOffset = (bitmap.height - size) / 2
+        return Bitmap.createBitmap(bitmap, xOffset, yOffset, size, size)
     }
 
     fun getPhotoBitmap(context: Context, usuarioId: Int): Bitmap? {

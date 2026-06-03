@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.app.Dialog
 import android.content.Intent
@@ -94,7 +94,7 @@ class AddStartupActivity : AppCompatActivity() {
         if (usuarioId == -1) return
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -125,7 +125,7 @@ class AddStartupActivity : AppCompatActivity() {
         }
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

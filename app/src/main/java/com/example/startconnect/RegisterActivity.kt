@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.content.Intent
 import android.os.Bundle
@@ -65,7 +65,7 @@ class RegisterActivity : AppCompatActivity() {
                 }
                 else -> {
                     val retrofit = Retrofit.Builder()
-                        .baseUrl("http://192.168.1.103/")
+                        .baseUrl("http://192.168.0.166/")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build()
 
@@ -96,7 +96,7 @@ class RegisterActivity : AppCompatActivity() {
                         }
 
                         override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                            Toast.makeText(this@RegisterActivity, "Falha na conexao: ${t.message}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@RegisterActivity, "Falha na conexão: ${t.message}", Toast.LENGTH_LONG).show()
                         }
                     })
                 }

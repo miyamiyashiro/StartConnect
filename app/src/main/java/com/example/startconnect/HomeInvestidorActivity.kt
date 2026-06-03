@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.app.Dialog
 import android.content.Intent
@@ -41,8 +41,8 @@ class HomeInvestidorActivity : AppCompatActivity() {
 
     private val tagFilterOptions = listOf(
         "Todas as tags",
-        "Saude",
-        "Alimentacao",
+        "Saúde",
+        "Alimentação",
         "Entretenimento",
         "Tech",
         "Meio-Ambiente"
@@ -104,7 +104,7 @@ class HomeInvestidorActivity : AppCompatActivity() {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -154,13 +154,15 @@ class HomeInvestidorActivity : AppCompatActivity() {
                 startup.tags.any { it.lowercase().contains(currentSearchQuery) }
 
             val matchesTag = currentTagFilter == "Todas as tags" ||
-                startup.tags.any { it.equals(currentTagFilter, ignoreCase = true) }
+                startup.tags.any { stripAccents(it).equals(stripAccents(currentTagFilter), ignoreCase = true) }
 
             matchesSearch && matchesTag
         }
 
         showStartups(filtered)
     }
+
+    private fun stripAccents(value: String): String = java.text.Normalizer.normalize(value, java.text.Normalizer.Form.NFD).replace("\\p{Mn}+".toRegex(), "")
 
     private fun showStartups(startups: List<Startup>) {
         recyclerView.adapter = StartupAdapter(
@@ -177,7 +179,7 @@ class HomeInvestidorActivity : AppCompatActivity() {
 
     private fun fetchStartups() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -217,7 +219,7 @@ class HomeInvestidorActivity : AppCompatActivity() {
             override fun onFailure(call: Call<List<StartupResponse>>, t: Throwable) {
                 Toast.makeText(
                     this@HomeInvestidorActivity,
-                    "Falha na conexao: ${t.message}",
+                    "Falha na conexão: ${t.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }

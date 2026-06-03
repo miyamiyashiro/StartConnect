@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.app.Dialog
 import android.content.Intent
@@ -72,7 +72,7 @@ class ConexoesActivity : AppCompatActivity() {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -119,12 +119,17 @@ class ConexoesActivity : AppCompatActivity() {
                     } else {
                         emptyText.visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
-                        recyclerView.adapter = ConexaoAdapter(conexoes)
+                        recyclerView.adapter = ConexaoAdapter(
+                            conexoes = conexoes,
+                            onActionClick = { conexao ->
+                                showDesfazerConexaoDialog(conexao)
+                            }
+                        )
                     }
                 } else {
                     Toast.makeText(
                         this@ConexoesActivity,
-                        "Erro ao carregar conexoes",
+                        "Erro ao carregar conexões",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -133,11 +138,69 @@ class ConexoesActivity : AppCompatActivity() {
             override fun onFailure(call: Call<List<ConexaoResponse>>, t: Throwable) {
                 Toast.makeText(
                     this@ConexoesActivity,
-                    "Falha na conexao: ${t.message}",
+                    "Falha na conexão: ${t.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }
         })
+    }
+
+    private fun showDesfazerConexaoDialog(conexao: ConexaoResponse) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_desfazer_conexao)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.findViewById<TextView>(R.id.txtDesfazerConexaoMsg).text =
+            "Tem certeza que deseja desfazer a conexão com\n${conexao.usuarioNome}?"
+
+        dialog.findViewById<MaterialButton>(R.id.btnCancelarDesfazerConexao).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.findViewById<MaterialButton>(R.id.btnConfirmarDesfazerConexao).setOnClickListener {
+            desfazerConexao(conexao, dialog)
+        }
+
+        dialog.show()
+    }
+
+    private fun desfazerConexao(conexao: ConexaoResponse, dialog: Dialog) {
+        val apiService = getRetrofit().create(ApiService::class.java)
+        apiService.desfazerConexao(usuarioId, conexao.usuarioId)
+            .enqueue(object : Callback<RegisterResponse> {
+                override fun onResponse(
+                    call: Call<RegisterResponse>,
+                    response: Response<RegisterResponse>
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val result = response.body()!!
+                        Toast.makeText(this@ConexoesActivity, result.message, Toast.LENGTH_LONG).show()
+                        if (result.success) {
+                            dialog.dismiss()
+                            fetchConexoes()
+                        }
+                    } else {
+                        Toast.makeText(
+                            this@ConexoesActivity,
+                            "Erro ao desfazer conexão (${response.code()})",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                    Toast.makeText(
+                        this@ConexoesActivity,
+                        "Falha na conexão: ${t.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
     }
 
     private fun openPerfil() {
@@ -146,22 +209,6 @@ class ConexoesActivity : AppCompatActivity() {
                 .putExtra("usuarioId", usuarioId)
                 .putExtra("usuarioTipo", usuarioTipo)
         )
-    }
-
-    private fun openHeartDestination() {
-        if (usuarioTipo.equals("Investidor", ignoreCase = true)) {
-            startActivity(
-                Intent(this, FavoritosActivity::class.java)
-                    .putExtra("usuarioId", usuarioId)
-                    .putExtra("usuarioTipo", usuarioTipo)
-            )
-        } else {
-            startActivity(
-                Intent(this, ConexoesActivity::class.java)
-                    .putExtra("usuarioId", usuarioId)
-                    .putExtra("usuarioTipo", usuarioTipo)
-            )
-        }
     }
 
     private fun showLogoutDialog() {
@@ -247,3 +294,4 @@ class ConexoesActivity : AppCompatActivity() {
         selectItem(findViewById(R.id.navFavoritosContainer), findViewById(R.id.navFavoritosIcon))
     }
 }
+

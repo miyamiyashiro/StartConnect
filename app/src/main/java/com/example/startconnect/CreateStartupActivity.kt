@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.app.Dialog
 import android.content.Intent
@@ -8,11 +8,10 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.view.Window
-import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Spinner
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
@@ -36,7 +35,7 @@ class CreateStartupActivity : AppCompatActivity() {
 
     private lateinit var etNomeStartup: EditText
     private lateinit var etDescricaoStartup: EditText
-    private lateinit var spinnerTipoStartup: Spinner
+    private lateinit var rgTipoStartup: RadioGroup
     private lateinit var etOutraTagStartup: EditText
     private lateinit var cbTagSaude: CheckBox
     private lateinit var cbTagAlimentacao: CheckBox
@@ -50,17 +49,9 @@ class CreateStartupActivity : AppCompatActivity() {
     private var initialTipo: String = ""
     private var initialTags: String = ""
 
-    private val tipoOptions = listOf(
-        "Selecione o tipo",
-        "Escalavel",
-        "Pequeno negocio",
-        "Compravel",
-        "Social"
-    )
-
     private val tagOptionsPadrao = listOf(
-        "Saude",
-        "Alimentacao",
+        "Saúde",
+        "Alimentação",
         "Entretenimento",
         "Tech",
         "Meio-Ambiente"
@@ -85,7 +76,7 @@ class CreateStartupActivity : AppCompatActivity() {
 
         etNomeStartup = findViewById(R.id.etNomeStartup)
         etDescricaoStartup = findViewById(R.id.etDescricaoStartup)
-        spinnerTipoStartup = findViewById(R.id.spinnerTipoStartup)
+        rgTipoStartup = findViewById(R.id.rgTipoStartup)
         etOutraTagStartup = findViewById(R.id.etOutraTagStartup)
         cbTagSaude = findViewById(R.id.cbTagSaude)
         cbTagAlimentacao = findViewById(R.id.cbTagAlimentacao)
@@ -99,22 +90,21 @@ class CreateStartupActivity : AppCompatActivity() {
         val txtCreateStartupTitle = findViewById<TextView>(R.id.txtCreateStartupTitle)
         val txtCreateStartupHandle = findViewById<TextView>(R.id.txtCreateStartupHandle)
 
-        setupTipoSpinner()
+        setupTipoOptions()
         setupOutroTag()
         loadProfileInfo(txtCreateStartupHandle)
 
         if (isEditMode) {
             txtCreateStartupTitle.text = "Editar Startup"
             txtCreateStartupTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)
-            btnSalvarStartup.text = "Salvar Alteracoes"
+            btnSalvarStartup.text = "Salvar Alterações"
             btnApagarStartup.visibility = View.VISIBLE
 
             etNomeStartup.setText(intent.getStringExtra("startupNome").orEmpty())
             etDescricaoStartup.setText(intent.getStringExtra("startupSubtitulo").orEmpty())
 
             val tipoExistente = intent.getStringExtra("startupSegmento").orEmpty()
-            val tipoIndex = tipoOptions.indexOf(tipoExistente).takeIf { it >= 0 } ?: 0
-            spinnerTipoStartup.setSelection(tipoIndex)
+            setSelectedTipo(tipoExistente)
 
             val tags = intent.getStringArrayListExtra("startupTags").orEmpty()
             preencherTagsExistentes(tags)
@@ -141,10 +131,34 @@ class CreateStartupActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupTipoSpinner() {
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, tipoOptions)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerTipoStartup.adapter = adapter
+    private fun setupTipoOptions() {
+        rgTipoStartup.clearCheck()
+    }
+
+    private fun setSelectedTipo(tipo: String) {
+        val radioId = when (tipo.lowercase()) {
+            "escalavel", "escalável" -> R.id.rbTipoEscalavel
+            "pequeno negocio", "pequeno negócio" -> R.id.rbTipoPequenoNegocio
+            "compravel", "comprável" -> R.id.rbTipoCompravel
+            "social" -> R.id.rbTipoSocial
+            else -> -1
+        }
+
+        if (radioId == -1) {
+            rgTipoStartup.clearCheck()
+        } else {
+            rgTipoStartup.check(radioId)
+        }
+    }
+
+    private fun getSelectedTipo(): String {
+        return when (rgTipoStartup.checkedRadioButtonId) {
+            R.id.rbTipoEscalavel -> "Escalável"
+            R.id.rbTipoPequenoNegocio -> "Pequeno negócio"
+            R.id.rbTipoCompravel -> "Comprável"
+            R.id.rbTipoSocial -> "Social"
+            else -> ""
+        }
     }
 
     private fun setupOutroTag() {
@@ -157,14 +171,14 @@ class CreateStartupActivity : AppCompatActivity() {
     }
 
     private fun preencherTagsExistentes(tags: List<String>) {
-        cbTagSaude.isChecked = tags.any { it.equals("Saude", ignoreCase = true) }
-        cbTagAlimentacao.isChecked = tags.any { it.equals("Alimentacao", ignoreCase = true) }
+        cbTagSaude.isChecked = tags.any { it.equals("Saude", ignoreCase = true) || it.equals("Saúde", ignoreCase = true) }
+        cbTagAlimentacao.isChecked = tags.any { it.equals("Alimentacao", ignoreCase = true) || it.equals("Alimentação", ignoreCase = true) }
         cbTagEntretenimento.isChecked = tags.any { it.equals("Entretenimento", ignoreCase = true) }
         cbTagTech.isChecked = tags.any { it.equals("Tech", ignoreCase = true) }
         cbTagMeioAmbiente.isChecked = tags.any { it.equals("Meio-Ambiente", ignoreCase = true) }
 
         val outraTag = tags.firstOrNull { tag ->
-            tagOptionsPadrao.none { it.equals(tag, ignoreCase = true) }
+            tagOptionsPadrao.none { it.equals(tag, ignoreCase = true) || stripAccents(it).equals(stripAccents(tag), ignoreCase = true) }
         }
 
         if (!outraTag.isNullOrBlank()) {
@@ -177,15 +191,15 @@ class CreateStartupActivity : AppCompatActivity() {
     private fun salvarStartup() {
         val nome = etNomeStartup.text.toString().trim()
         val descricao = etDescricaoStartup.text.toString().trim()
-        val tipoStartup = spinnerTipoStartup.selectedItem?.toString().orEmpty()
+        val tipoStartup = getSelectedTipo()
         val tagsSelecionadas = getSelectedTags()
 
         if (usuarioId == -1) {
-            Toast.makeText(this, "Usuario invalido", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Usuário inválido", Toast.LENGTH_LONG).show()
             return
         }
 
-        if (nome.isEmpty() || tipoStartup == "Selecione o tipo") {
+        if (nome.isEmpty() || tipoStartup.isEmpty()) {
             Toast.makeText(this, "Preencha nome e tipo de startup", Toast.LENGTH_LONG).show()
             return
         }
@@ -196,7 +210,7 @@ class CreateStartupActivity : AppCompatActivity() {
         }
 
         if (tagsSelecionadas.size > 4) {
-            Toast.makeText(this, "Escolha no maximo 4 tags", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Escolha no máximo 4 tags", Toast.LENGTH_LONG).show()
             return
         }
 
@@ -206,7 +220,7 @@ class CreateStartupActivity : AppCompatActivity() {
         val tag4 = tagsSelecionadas.getOrElse(3) { "" }
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -267,7 +281,7 @@ class CreateStartupActivity : AppCompatActivity() {
             override fun onFailure(call: Call<StartupRegisterResponse>, t: Throwable) {
                 Toast.makeText(
                     this@CreateStartupActivity,
-                    "Falha na conexao: ${t.message}",
+                    "Falha na conexão: ${t.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -277,8 +291,8 @@ class CreateStartupActivity : AppCompatActivity() {
     private fun getSelectedTags(): List<String> {
         val tags = mutableListOf<String>()
 
-        if (cbTagSaude.isChecked) tags.add("Saude")
-        if (cbTagAlimentacao.isChecked) tags.add("Alimentacao")
+        if (cbTagSaude.isChecked) tags.add("Saúde")
+        if (cbTagAlimentacao.isChecked) tags.add("Alimentação")
         if (cbTagEntretenimento.isChecked) tags.add("Entretenimento")
         if (cbTagTech.isChecked) tags.add("Tech")
         if (cbTagMeioAmbiente.isChecked) tags.add("Meio-Ambiente")
@@ -292,6 +306,8 @@ class CreateStartupActivity : AppCompatActivity() {
 
         return tags
     }
+
+    private fun stripAccents(value: String): String = java.text.Normalizer.normalize(value, java.text.Normalizer.Form.NFD).replace("\\p{Mn}+".toRegex(), "")
 
     private fun showDeleteStartupDialog() {
         val dialog = Dialog(this)
@@ -322,7 +338,7 @@ class CreateStartupActivity : AppCompatActivity() {
         }
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -356,7 +372,7 @@ class CreateStartupActivity : AppCompatActivity() {
             override fun onFailure(call: Call<StartupRegisterResponse>, t: Throwable) {
                 Toast.makeText(
                     this@CreateStartupActivity,
-                    "Falha na conexao: ${t.message}",
+                    "Falha na conexão: ${t.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -367,7 +383,7 @@ class CreateStartupActivity : AppCompatActivity() {
         if (usuarioId == -1) return
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -388,14 +404,14 @@ class CreateStartupActivity : AppCompatActivity() {
     private fun saveInitialValues() {
         initialNome = etNomeStartup.text.toString().trim()
         initialDescricao = etDescricaoStartup.text.toString().trim()
-        initialTipo = spinnerTipoStartup.selectedItem?.toString().orEmpty()
+        initialTipo = getSelectedTipo()
         initialTags = getSelectedTags().joinToString(", ")
     }
 
     private fun hasUnsavedChanges(): Boolean {
         return etNomeStartup.text.toString().trim() != initialNome ||
             etDescricaoStartup.text.toString().trim() != initialDescricao ||
-            spinnerTipoStartup.selectedItem?.toString().orEmpty() != initialTipo ||
+            getSelectedTipo() != initialTipo ||
             getSelectedTags().joinToString(", ") != initialTags
     }
 

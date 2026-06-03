@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.app.Dialog
 import android.content.Intent
@@ -105,7 +105,7 @@ class PerfilActivity : AppCompatActivity() {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -127,7 +127,7 @@ class PerfilActivity : AppCompatActivity() {
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 Toast.makeText(
                     this@PerfilActivity,
-                    "Falha na conexao: ${t.message}",
+                    "Falha na conexão: ${t.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -190,7 +190,7 @@ class PerfilActivity : AppCompatActivity() {
                     override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                         Toast.makeText(
                             this@PerfilActivity,
-                            "Falha na conexao: ${t.message}",
+                            "Falha na conexão: ${t.message}",
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -221,14 +221,19 @@ class PerfilActivity : AppCompatActivity() {
                     if (resp.success) {
                         initialNome = nome
                         initialEmail = email
+                        findViewById<TextView>(R.id.txtPerfilTipo).text = "@$nome"
                     }
                 } else {
-                    Toast.makeText(this@PerfilActivity, "Erro ao salvar perfil", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@PerfilActivity,
+                        "Erro ao salvar perfil (${response.code()})",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                Toast.makeText(this@PerfilActivity, "Falha na conexao: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@PerfilActivity, "Falha na conexão: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -319,7 +324,7 @@ class PerfilActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                     Toast.makeText(
                         this@PerfilActivity,
-                        "Falha na conexao: ${t.message}",
+                        "Falha na conexão: ${t.message}",
                         Toast.LENGTH_LONG
                     ).show()
                 }

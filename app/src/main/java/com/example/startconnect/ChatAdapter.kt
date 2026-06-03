@@ -1,10 +1,11 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.imageview.ShapeableImageView
 
 class ChatAdapter(
     private val chats: List<ChatResponse>,
@@ -42,10 +43,17 @@ class ChatAdapter(
     class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nome: TextView = itemView.findViewById(R.id.txtChatNome)
         private val ultimaMsg: TextView = itemView.findViewById(R.id.txtChatUltimaMensagem)
+        private val foto: ShapeableImageView = itemView.findViewById(R.id.imgChatProfile)
 
         fun bind(chat: ChatResponse) {
             nome.text = chat.startupNome
             ultimaMsg.text = chat.ultimaMensagem
+            val bitmap = ProfilePhotoHelper.getPhotoBitmap(itemView.context, chat.outroUsuarioId)
+            if (bitmap != null) {
+                foto.setImageBitmap(bitmap)
+            } else {
+                foto.setImageResource(R.drawable.foto_vazia)
+            }
         }
     }
 }

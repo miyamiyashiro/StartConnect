@@ -1,4 +1,4 @@
-package com.example.startconnect
+﻿package com.example.startconnect
 
 import android.app.Dialog
 import android.content.Intent
@@ -46,6 +46,7 @@ class NotificacoesActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.notificacoesRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        loadProfilePhoto()
         loadProfileInfo()
         setupBottomNavigation()
     }
@@ -57,9 +58,16 @@ class NotificacoesActivity : AppCompatActivity() {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.103/")
+            .baseUrl("http://192.168.0.166/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    private fun loadProfilePhoto() {
+        val bitmap = ProfilePhotoHelper.getPhotoBitmap(this, usuarioId)
+        if (bitmap != null) {
+            findViewById<ImageView>(R.id.imgHeaderProfile).setImageBitmap(bitmap)
+        }
     }
 
     private fun loadProfileInfo() {
@@ -96,13 +104,13 @@ class NotificacoesActivity : AppCompatActivity() {
                             "Você têm ${notificacoes.size} nova${if (notificacoes.size > 1) "s" else ""}\nnotificaç${if (notificacoes.size > 1) "ões" else "ão"}"
 
                         recyclerView.adapter = NotificacaoAdapter(notificacoes) { notif ->
-                            // Ao clicar na notificacao, abre o chat da startup
                             val intent = Intent(this@NotificacoesActivity, ChatConversaActivity::class.java)
                             intent.putExtra("usuarioId", usuarioId)
                             intent.putExtra("usuarioTipo", usuarioTipo)
                             intent.putExtra("startupId", notif.startupId)
                             intent.putExtra("startupNome", notif.startupNome)
                             intent.putExtra("outroUsuarioId", notif.remetenteId)
+                            intent.putExtra("outroUsuarioNome", notif.remetenteNome)
                             startActivity(intent)
                         }
                     }
